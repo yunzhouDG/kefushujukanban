@@ -925,8 +925,6 @@
                     itemStyle: { borderRadius: [0, 8, 8, 0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#34d399'},{offset:1,color:'#10b981'}]) } 
                 }]
             });
-        }
-
 
             // ===== 图表6: CC vs 钉钉双渠道对比 =====
             channelChart.setOption({
@@ -1093,6 +1091,7 @@
                     }
                 ]
             });
+        }
 
         function updateBrandDetail(summary, brandFilter) {
             var brands = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
