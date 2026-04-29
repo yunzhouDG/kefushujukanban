@@ -444,7 +444,7 @@
             <div class="chart-content" id="funnelChart"></div>
         </div>
         <div class="chart-container full-width">
-            <div class="chart-title">📈 品牌有效率趋势</div>
+            <div class="chart-title">📈 品牌清洗量趋势</div>
             <div class="chart-content" id="brandTrendChart"></div>
         </div>
         <div class="chart-container">
@@ -968,38 +968,35 @@
                 }]
             });
 
-            // ===== 图表8: 品牌有效率趋势 =====
+            // ===== 图表8: 品牌清洗量趋势 =====
             var brandNames = ['美的', '小天鹅', 'COLMO', '东芝'];
-            var brandTrendColors = ['#818cf8', '#34d399', '#fbbf24', '#f472b6'];
+            var brandTrendColors = [['#818cf8','#4f46e5'], ['#34d399','#10b981'], ['#fbbf24','#f59e0b'], ['#f472b6','#ec4899']];
             var brandTrendSeries = brandNames.map(function(brand, idx) {
-                var rateData = summary.daily_data.map(function(day) {
-                    var brandDist = day['品牌分布'] || {};
+                var cleanData = summary.daily_data.map(function(day) {
                     var crossCC = (day['品牌客资交叉_CC'] || {})[brand] || {};
                     var crossDD = (day['品牌客资交叉_钉钉'] || {})[brand] || {};
                     var total = Object.values(crossCC).reduce(function(a,b){return a+b;},0) + Object.values(crossDD).reduce(function(a,b){return a+b;},0);
-                    var validCrossCC = (day['品牌客资交叉_CC'] || {})[brand] || {};
-                    var validCrossDD = (day['品牌客资交叉_钉钉'] || {})[brand] || {};
-                    // 近似有效率 = 全局有效率
-                    var rate = day['有效率'] || 0;
-                    return rate;
+                    return total;
                 });
                 return {
                     name: brand, type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
-                    lineStyle: { width: 2.5, color: brandTrendColors[idx] },
-                    itemStyle: { color: brandTrendColors[idx] },
-                    data: rateData
+                    lineStyle: { width: 2.5, color: brandTrendColors[idx][0] },
+                    itemStyle: { color: brandTrendColors[idx][0] },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {offset: 0, color: brandTrendColors[idx][0] + '40'},
+                            {offset: 1, color: brandTrendColors[idx][1] + '05'}
+                        ])
+                    },
+                    data: cleanData
                 };
             });
             brandTrendChart.setOption({
-                tooltip: { trigger: 'axis', formatter: function(params) {
-                    var s = params[0].axisValue + '<br/>';
-                    params.forEach(function(p){ s += p.marker + ' ' + p.seriesName + ': ' + p.value + '%<br/>'; });
-                    return s;
-                }},
+                tooltip: { trigger: 'axis' },
                 legend: { data: brandNames, top: 5, textStyle: { color: '#94a3b8' } },
                 grid: { left: '3%', right: '4%', bottom: '3%', top: 40, containLabel: true },
                 xAxis: { type: 'category', data: summary.daily_data.map(function(d){return d['日期'].substring(5);}), axisLabel: { color: '#94a3b8', rotate: 30 } },
-                yAxis: { type: 'value', axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
+                yAxis: { type: 'value', name: '清洗量', axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
                 series: brandTrendSeries
             });
 
