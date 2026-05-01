@@ -199,98 +199,125 @@
             gap: 18px;
         }
         .brand-card {
-            background: rgba(255,255,255,0.03);
             padding: 0;
-            border-radius: 14px;
+            border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.08);
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.25s, box-shadow 0.25s;
         }
         .brand-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
         }
         .brand-card-header {
-            padding: 16px 18px 12px;
-            border-left: 4px solid;
+            padding: 18px 18px 14px;
+            position: relative;
         }
         .brand-card-header h4 {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
-            margin: 0 0 10px 0;
+            margin: 0 0 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-card-header h4::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
         }
         .brand-summary-row {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
         .brand-summary-item {
             flex: 1;
             text-align: center;
-            padding: 6px 2px;
-            border-radius: 8px;
+            padding: 8px 4px;
+            border-radius: 10px;
             background: rgba(255,255,255,0.04);
+        }
+        .brand-summary-item .value {
+            font-size: 18px;
+            font-weight: 800;
+            display: block;
+            line-height: 1.2;
         }
         .brand-summary-item .label {
             font-size: 10px;
             color: #64748b;
             display: block;
-            margin-bottom: 2px;
-        }
-        .brand-summary-item .value {
-            font-size: 15px;
-            font-weight: 700;
-            display: block;
+            margin-top: 2px;
         }
         .brand-type-section {
-            padding: 6px 14px 14px;
+            padding: 8px 14px 16px;
         }
         .brand-type-row {
             display: flex;
             align-items: center;
-            padding: 7px 10px;
-            margin: 3px 0;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.02);
-            gap: 8px;
+            padding: 9px 12px;
+            margin: 4px 0;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.025);
+            gap: 10px;
+            position: relative;
         }
         .brand-type-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
             flex-shrink: 0;
         }
         .brand-type-name {
             font-size: 12px;
             font-weight: 600;
-            min-width: 56px;
+            min-width: 60px;
             flex-shrink: 0;
         }
         .brand-type-data {
             display: flex;
             flex: 1;
-            gap: 2px;
+            gap: 6px;
             justify-content: flex-end;
         }
         .brand-type-cell {
             text-align: right;
-            min-width: 46px;
+            min-width: 50px;
             padding: 0 4px;
         }
         .brand-type-cell .num {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: #e2e8f0;
             display: block;
+            line-height: 1.3;
         }
         .brand-type-cell .unit {
             font-size: 9px;
-            color: #64748b;
+            color: #475569;
+            letter-spacing: 0.5px;
+        }
+        .brand-type-rate-wrap {
+            min-width: 56px;
+            text-align: right;
         }
         .brand-type-rate {
-            font-size: 13px;
-            font-weight: 700;
-            min-width: 48px;
-            text-align: right;
+            font-size: 14px;
+            font-weight: 800;
+        }
+        .brand-type-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.06);
+            margin-top: 3px;
+            overflow: hidden;
+        }
+        .brand-type-bar-inner {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s ease;
         }
         
         .data-table { width: 100%; border-collapse: separate; border-spacing: 0; display: block; overflow-x: auto; white-space: nowrap; }
@@ -1175,19 +1202,22 @@
         function updateBrandDetail(summary, brandFilter) {
             var brands = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
             var colors = {'美的': '#3b82f6', '小天鹅': '#06b6d4', 'COLMO': '#8b5cf6', '东芝': '#f472b6'};
+            var bgGrads = {
+                '美的': 'linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.02) 100%)',
+                '小天鹅': 'linear-gradient(135deg, rgba(6,182,212,0.08) 0%, rgba(6,182,212,0.02) 100%)',
+                'COLMO': 'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(139,92,246,0.02) 100%)',
+                '东芝': 'linear-gradient(135deg, rgba(244,114,182,0.08) 0%, rgba(244,114,182,0.02) 100%)'
+            };
             var typeColors = {'客服卡片': '#60a5fa', '家享联盟': '#34d399', '其他': '#94a3b8'};
-            var typeIcons = {'客服卡片': '🔷', '家享联盟': '💚', '其他': '⚪'};
 
             var html = '';
             brands.forEach(function(brand) {
                 var data = summary.brand_customer_cross[brand] || {};
                 var total = Object.values(data).reduce(function(a, b){return a+b}, 0);
 
-                // 品牌×类型：清洗量/有效量
                 var btc = summary.brand_type_clean[brand] || {};
                 var btv = summary.brand_type_valid[brand] || {};
 
-                // 品牌汇总
                 var calls, clean, valid;
                 if (brandFilter === 'all') {
                     calls = summary.brand_calls[brand] || 0;
@@ -1202,15 +1232,16 @@
                 var rateColor = parseFloat(rate) >= 50 ? '#34d399' : (parseFloat(rate) >= 30 ? '#fbbf24' : '#f87171');
 
                 // 卡片
-                html += '<div class="brand-card">';
-                // 头部：品牌名 + 汇总
-                html += '<div class="brand-card-header" style="border-left-color:' + colors[brand] + '">';
-                html += '<h4 style="color:' + colors[brand] + '">' + brand + '</h4>';
+                html += '<div class="brand-card" style="background:' + bgGrads[brand] + '">';
+
+                // 头部
+                html += '<div class="brand-card-header">';
+                html += '<h4 style="color:' + colors[brand] + '"><span style="background:' + colors[brand] + ';width:4px;height:18px;border-radius:2px;display:inline-block"></span>' + brand + '</h4>';
                 html += '<div class="brand-summary-row">';
-                html += '<div class="brand-summary-item"><span class="label">📞 电话</span><span class="value" style="color:#93c5fd">' + calls.toLocaleString() + '</span></div>';
-                html += '<div class="brand-summary-item"><span class="label">🧹 清洗</span><span class="value" style="color:#f9a8d4">' + clean.toLocaleString() + '</span></div>';
-                html += '<div class="brand-summary-item"><span class="label">✅ 有效</span><span class="value" style="color:#86efac">' + valid.toLocaleString() + '</span></div>';
-                html += '<div class="brand-summary-item"><span class="label">📈 有效率</span><span class="value" style="color:' + rateColor + '">' + rate + '%</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#93c5fd">' + calls.toLocaleString() + '</span><span class="label">电话</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#f9a8d4">' + clean.toLocaleString() + '</span><span class="label">清洗</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#86efac">' + valid.toLocaleString() + '</span><span class="label">有效</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:' + rateColor + '">' + rate + '%</span><span class="label">有效率</span></div>';
                 html += '</div></div>';
 
                 // 类型拆分行
@@ -1221,6 +1252,7 @@
                     var tValid = btv[t] || 0;
                     var tRate = tClean > 0 ? (tValid / tClean * 100).toFixed(1) : '0.0';
                     var tRateColor = parseFloat(tRate) >= 50 ? '#34d399' : (parseFloat(tRate) >= 30 ? '#fbbf24' : '#f87171');
+                    var barWidth = Math.min(parseFloat(tRate), 100);
 
                     html += '<div class="brand-type-row">';
                     html += '<span class="brand-type-dot" style="background:' + typeColors[t] + '"></span>';
@@ -1230,7 +1262,10 @@
                     html += '<span class="brand-type-cell"><span class="num">' + tClean.toLocaleString() + '</span><span class="unit">清洗</span></span>';
                     html += '<span class="brand-type-cell"><span class="num">' + tValid.toLocaleString() + '</span><span class="unit">有效</span></span>';
                     html += '</span>';
+                    html += '<span class="brand-type-rate-wrap">';
                     html += '<span class="brand-type-rate" style="color:' + tRateColor + '">' + tRate + '%</span>';
+                    html += '<div class="brand-type-bar"><div class="brand-type-bar-inner" style="width:' + barWidth + '%;background:' + tRateColor + '"></div></div>';
+                    html += '</span>';
                     html += '</div>';
                 });
                 html += '</div></div>';
