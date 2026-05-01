@@ -14,56 +14,77 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #0a0e1a 0%, #1e293b 50%, #0f172a 100%);
-            color: #f8fafc;
+            background: linear-gradient(135deg, #06080f 0%, #0f172a 40%, #1a1a2e 100%);
+            color: #f1f5f9;
             padding: 20px;
             min-height: 100vh;
         }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body > * { position: relative; z-index: 1; }
         .header {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #db2777 70%, #f43f5e 100%);
-            padding: 44px 40px;
-            border-radius: 22px;
-            margin-bottom: 28px;
+            background: linear-gradient(135deg, #312e81 0%, #4f46e5 25%, #7c3aed 50%, #a855f7 75%, #ec4899 100%);
+            padding: 48px 44px;
+            border-radius: 24px;
+            margin-bottom: 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(79,70,229,0.3), 0 0 80px rgba(219,39,119,0.15);
+            box-shadow: 0 8px 40px rgba(79,70,229,0.35), 0 0 100px rgba(168,85,247,0.12);
+            border: 1px solid rgba(255,255,255,0.08);
         }
         .header::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0%, transparent 40%);
-            animation: headerGlow 8s ease-in-out infinite alternate;
+            top: -60%; left: -30%;
+            width: 160%; height: 220%;
+            background: radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.10) 0%, transparent 55%),
+                        radial-gradient(ellipse at 75% 65%, rgba(255,255,255,0.07) 0%, transparent 45%);
+            animation: headerGlow 10s ease-in-out infinite alternate;
         }
         .header h1 {
-            font-size: 38px;
-            margin-bottom: 10px;
+            font-size: 42px;
+            margin-bottom: 12px;
             position: relative;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+            font-weight: 800;
         }
         .header p {
-            opacity: 0.92;
+            opacity: 0.9;
             position: relative;
             font-size: 15px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.85);
         }
         
         .filter-bar {
-            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(12px);
-            padding: 20px 24px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%);
+            backdrop-filter: blur(16px);
+            padding: 18px 26px;
             border-radius: 18px;
-            margin-bottom: 26px;
+            margin-bottom: 28px;
             display: flex;
-            gap: 22px;
+            gap: 20px;
             align-items: center;
             flex-wrap: nowrap;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        .filter-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
         }
         .filter-item { display: flex; align-items: center; gap: 8px; }
         .filter-item label { color: #94a3b8; font-size: 14px; }
@@ -125,12 +146,12 @@
             text-transform: uppercase;
         }
         .stat-value {
-            font-size: 42px;
+            font-size: 44px;
             font-weight: 800;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #f1f5f9;
+            text-shadow: 0 0 30px rgba(255,255,255,0.08);
+            letter-spacing: -1px;
         }
         .stat-breakdown {
             color: #94a3b8;
@@ -147,42 +168,63 @@
             margin-bottom: 24px;
         }
         .chart-container {
-            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            background: linear-gradient(145deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.005) 100%);
             padding: 22px;
             border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.07);
             height: 380px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+            border-radius: 18px 18px 0 0;
         }
         .chart-container:hover {
-            border-color: rgba(99,102,241,0.2);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+            border-color: rgba(99,102,241,0.18);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            background: linear-gradient(145deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.008) 100%);
         }
         .chart-container.full-width {
             grid-column: 1 / -1;
             height: 420px;
         }
         .chart-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
         }
         .chart-content {
             height: calc(100% - 35px);
         }
         
         .detail-section {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(12px);
+            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(14px);
             padding: 28px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 26px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 28px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+            position: relative;
+        }
+        .detail-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+            border-radius: 20px 20px 0 0;
         }
         .detail-title {
             font-size: 20px;
@@ -320,21 +362,30 @@
             transition: width 0.6s ease;
         }
         
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; display: block; overflow-x: auto; white-space: nowrap; }
+        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
         .data-table th, .data-table td {
-            padding: 12px 16px;
+            padding: 13px 18px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .data-table th {
-            color: #94a3b8;
-            font-weight: 500;
-            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            background: rgba(15,23,42,0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1;
         }
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; display: block; overflow-x: auto; white-space: nowrap; }
-        .data-table td { color: #f8fafc; }
-        .data-table tr:hover { background: rgba(255,255,255,0.03); }
+        .data-table td { color: #e2e8f0; font-size: 13px; }
+        .data-table tbody tr {
+            transition: background 0.15s ease;
+        }
+        .data-table tbody tr:hover { background: rgba(99,102,241,0.06); }
+        .data-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.008); }
 
         /* 客服工作量排行 - 卡片式布局（美化版） */
         .visitor-cards {
@@ -457,6 +508,23 @@
             from { transform: translate(0, 0); }
             to { transform: translate(2%, -2%); }
         }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        /* 页面载入动画 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .header    { animation: fadeInUp 0.5s ease 0.05s both; }
+        .filter-bar  { animation: fadeInUp 0.5s ease 0.12s both; }
+        .stats-grid  { animation: fadeInUp 0.5s ease 0.2s both; }
+        .charts-grid  { animation: fadeInUp 0.5s ease 0.3s both; }
+        .detail-section { animation: fadeInUp 0.5s ease 0.4s both; }
     </style>
 </head>
 <body>
