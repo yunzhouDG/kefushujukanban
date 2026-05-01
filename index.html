@@ -519,6 +519,10 @@
                 brand_distribution: {},
                 customer_type_distribution: {},
                 visitor_stats: {},
+                // 品牌维度：电话量/清洗量/有效量
+                brand_calls: {},
+                brand_clean: {},
+                brand_valid: {},
                 // 回访人维度：电话量/清洗量/有效量
                 visitor_calls: {},
                 visitor_clean: {},
@@ -551,7 +555,16 @@
                     Object.entries(day['品牌分布']).forEach(([brand, count]) => {
                         summary.brand_distribution[brand] = (summary.brand_distribution[brand] || 0) + count;
                     });
-                    
+
+                    // 品牌维度：电话量/清洗量/有效量
+                    var ccBrandDist = day['品牌分布_CC'] || {};
+                    var ddBrandDist = day['品牌分布_钉钉'] || {};
+                    ['美的', '小天鹅', 'COLMO', '东芝'].forEach(function(brand) {
+                        summary.brand_calls[brand] = (summary.brand_calls[brand] || 0) + (ccBrandDist[brand] || 0) + (ddBrandDist[brand] || 0);
+                        summary.brand_clean[brand] = (summary.brand_clean[brand] || 0) + ((day['品牌清洗量'] || {})[brand] || 0);
+                        summary.brand_valid[brand] = (summary.brand_valid[brand] || 0) + ((day['品牌有效量'] || {})[brand] || 0);
+                    });
+
                     // 客资类型分布
                     Object.entries(day['客资类型分布']).forEach(([type, count]) => {
                         summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
@@ -1052,28 +1065,62 @@
             });
         }
 
-        function updateBrandDetail(summary, brandFilter) {
-            var brands = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
-            var colors = {'美的': '#3b82f6', '小天鹅': '#06b6d4', 'COLMO': '#8b5cf6', '东芝': '#f472b6'};
-            
-            var html = '';
-            brands.forEach(function(brand) {
-                var data = summary.brand_customer_cross[brand] || {};
-                var total = Object.values(data).reduce(function(a, b){return a+b}, 0);
-                html +=
-                    '<div class="brand-card">' +
-                        '<h4 style="color:' + colors[brand] + '">' + brand + '</h4>' +
-                        '<div class="brand-stats">' +
-                            '<div class="brand-stat-item"><span class="brand-stat-label">总计</span><span class="brand-stat-value">' + total.toLocaleString() + '</span></div>' +
-                            '<div class="brand-stat-item"><span class="brand-stat-label">客服卡片</span><span class="brand-stat-value">' + ((data['客服卡片']||0)).toLocaleString() + '</span></div>' +
-                            '<div class="brand-stat-item"><span class="brand-stat-label">家享联盟</span><span class="brand-stat-value">' + ((data['家享联盟']||0)).toLocaleString() + '</span></div>' +
-                            '<div class="brand-stat-item"><span class="brand-stat-label">智投线索通</span><span class="brand-stat-value">' + ((data['智投线索通']||0)).toLocaleString() + '</span></div>' +
-                            '<div class="brand-stat-item"><span class="brand-stat-label">其他</span><span class="brand-stat-value">' + ((data['其他']||0)).toLocaleString() + '</span></div>' +
-                        '</div>' +
-                    '</div>';
-            });
-            document.getElementById('brandDetailGrid').innerHTML = html;
-        }
+        function updateBrandDetail(summary, brandFilter) {
+
+            var brands = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
+            var colors = {'美的': '#3b82f6', '小天鹅': '#06b6d4', 'COLMO': '#8b5cf6', '东芝': '#f472b6'};
+
+            var html = '';
+            brands.forEach(function(brand) {
+                var data = summary.brand_customer_cross[brand] || {};
+                var total = Object.values(data).reduce(function(a, b){return a+b}, 0);
+
+                // 电话量/清洗量/有效量：全品牌从brand_calls取，单品牌直接用summary汇总值
+                var calls, clean, valid;
+                if (brandFilter === 'all') {
+                    calls = summary.brand_calls[brand] || 0;
+                    clean = summary.brand_clean[brand] || 0;
+                    valid = summary.brand_valid[brand] || 0;
+                } else {
+                    calls = summary.total_calls || 0;
+                    clean = summary.clean_count || 0;
+                    valid = summary.valid_count || 0;
+                }
+                var rate = clean > 0 ? (valid / clean * 100).toFixed(1) : '0.0';
+                var rateColor = parseFloat(rate) >= 50 ? '#34d399' : (parseFloat(rate) >= 30 ? '#fbbf24' : '#f87171');
+
+                html +=
+                    '<div class="brand-card">' +
+                        '<h4 style="color:' + colors[brand] + '">' + brand + '</h4>' +
+                        '<div class="brand-stats">' +
+                            '<div class="brand-stat-item"><span class="brand-stat-label">总计</span><span class="brand-stat-value">' + total.toLocaleString() + '</span></div>' +
+                            '<div class="brand-stat-item"><span class="brand-stat-label">客服卡片</span><span class="brand-stat-value">' + ((data['客服卡片']||0)).toLocaleString() + '</span></div>' +
+                            '<div class="brand-stat-item"><span class="brand-stat-label">家享联盟</span><span class="brand-stat-value">' + ((data['家享联盟']||0)).toLocaleString() + '</span></div>' +
+                            '<div class="brand-stat-item"><span class="brand-stat-label">智投线索通</span><span class="brand-stat-value">' + ((data['智投线索通']||0)).toLocaleString() + '</span></div>' +
+                            '<div class="brand-stat-item"><span class="brand-stat-label">其他</span><span class="brand-stat-value">' + ((data['其他']||0)).toLocaleString() + '</span></div>' +
+                        '</div>' +
+                        '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;gap:8px;flex-wrap:wrap;">' +
+                            '<div style="flex:1;min-width:60px;background:rgba(96,165,250,0.1);border-radius:8px;padding:6px 8px;text-align:center;">' +
+                                '<div style="color:#94a3b8;font-size:11px;margin-bottom:2px;">电话量</div>' +
+                                '<div style="color:#60a5fa;font-size:15px;font-weight:700;">' + calls.toLocaleString() + '</div>' +
+                            '</div>' +
+                            '<div style="flex:1;min-width:60px;background:rgba(244,114,182,0.1);border-radius:8px;padding:6px 8px;text-align:center;">' +
+                                '<div style="color:#94a3b8;font-size:11px;margin-bottom:2px;">清洗量</div>' +
+                                '<div style="color:#f472b6;font-size:15px;font-weight:700;">' + clean.toLocaleString() + '</div>' +
+                            '</div>' +
+                            '<div style="flex:1;min-width:60px;background:rgba(52,211,153,0.1);border-radius:8px;padding:6px 8px;text-align:center;">' +
+                                '<div style="color:#94a3b8;font-size:11px;margin-bottom:2px;">有效量</div>' +
+                                '<div style="color:#34d399;font-size:15px;font-weight:700;">' + valid.toLocaleString() + '</div>' +
+                            '</div>' +
+                            '<div style="flex:1;min-width:60px;background:rgba(251,191,36,0.08);border-radius:8px;padding:6px 8px;text-align:center;">' +
+                                '<div style="color:#94a3b8;font-size:11px;margin-bottom:2px;">有效率</div>' +
+                                '<div style="color:' + rateColor + ';font-size:15px;font-weight:700;">' + rate + '%</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            });
+            document.getElementById('brandDetailGrid').innerHTML = html;
+        }
 
         function updateVisitorTable(summary) {
             // === 计算汇总数据 ===
