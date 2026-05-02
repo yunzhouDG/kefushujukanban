@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <script>window.dataVersion = '20260502_1056';</script>
+    <script>window.dataVersion = '20260502_1152';</script>
     <title>客服清洗数据看板 - CC+钉钉整合</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script>if(typeof echarts==='undefined'){document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"><\/script>');}</script>
@@ -238,17 +238,10 @@
         .brand-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+            gap: 20px;
         }
         .brand-grid.has-summary {
             grid-template-columns: 1fr;
-        }
-        .brand-grid.has-summary .brand-card {
-            max-width: 100%;
-        }
-        .brand-card.summary-card {
-            background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(167,139,250,0.06) 100%);
-            border: 1px solid rgba(99,102,241,0.25);
         }
         .brand-card {
             padding: 0;
@@ -256,29 +249,43 @@
             border: 1px solid rgba(255,255,255,0.08);
             overflow: hidden;
             transition: transform 0.25s, box-shadow 0.25s;
+            position: relative;
         }
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+        .brand-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .brand-card:nth-child(2)::before { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+        .brand-card:nth-child(3)::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .brand-card:nth-child(4)::before { background: linear-gradient(90deg, #f472b6, #f9a8d4); }
         .brand-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+        }
+        .brand-card.summary-card {
+            background: linear-gradient(135deg, rgba(99,102,241,0.10) 0%, rgba(167,139,250,0.04) 100%);
+            border: 1px solid rgba(99,102,241,0.20);
+        }
+        .brand-card.summary-card::before {
+            background: linear-gradient(90deg, #6366f1, #a78bfa, #6366f1) !important;
+            height: 3px;
         }
         .brand-card-header {
             padding: 18px 18px 14px;
             position: relative;
         }
         .brand-card-header h4 {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             margin: 0 0 14px 0;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        .brand-card-header h4::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 18px;
-            border-radius: 2px;
+            letter-spacing: 0.5px;
         }
         .brand-summary-row {
             display: flex;
@@ -309,42 +316,47 @@
         .brand-type-row {
             display: flex;
             align-items: center;
-            padding: 9px 12px;
-            margin: 4px 0;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.025);
+            padding: 8px 14px;
+            margin: 3px 0;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.02);
             gap: 10px;
-            position: relative;
+            transition: background 0.2s;
+        }
+        .brand-type-row:hover {
+            background: rgba(255,255,255,0.06);
         }
         .brand-type-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 3px;
             flex-shrink: 0;
+            box-shadow: 0 0 6px rgba(255,255,255,0.15);
         }
         .brand-type-name {
             font-size: 12px;
             font-weight: 600;
-            min-width: 60px;
+            width: 64px;
             flex-shrink: 0;
+            letter-spacing: 0.3px;
         }
         .brand-type-data {
             display: flex;
             flex: 1;
             gap: 6px;
-            justify-content: flex-end;
+            justify-content: space-around;
         }
         .brand-type-cell {
-            text-align: right;
-            min-width: 50px;
-            padding: 0 4px;
+            text-align: center;
+            width: 58px;
+            padding: 2px 0;
         }
         .brand-type-cell .num {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #e2e8f0;
             display: block;
-            line-height: 1.3;
+            line-height: 1.4;
         }
         .brand-type-cell .unit {
             font-size: 9px;
@@ -352,8 +364,10 @@
             letter-spacing: 0.5px;
         }
         .brand-type-rate-wrap {
-            min-width: 56px;
+            width: 60px;
             text-align: right;
+            flex-shrink: 0;
+
         }
         .brand-type-rate {
             font-size: 14px;
