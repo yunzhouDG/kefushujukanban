@@ -237,8 +237,18 @@
         
         .brand-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 18px;
+        }
+        .brand-grid.has-summary {
+            grid-template-columns: 1fr;
+        }
+        .brand-grid.has-summary .brand-card {
+            max-width: 100%;
+        }
+        .brand-card.summary-card {
+            background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(167,139,250,0.06) 100%);
+            border: 1px solid rgba(99,102,241,0.25);
         }
         .brand-card {
             padding: 0;
@@ -587,7 +597,7 @@
 
     <div class="detail-section">
         <div class="detail-title"><span>🏢</span> 各品牌客资明细</div>
-        <div class="brand-grid" id="brandDetailGrid"></div>
+        <div id="brandDetailGrid"></div>
     </div>
 
     <div class="charts-grid">
@@ -1278,7 +1288,80 @@
             };
             var typeColors = {'客服卡片': '#60a5fa', '家享联盟': '#34d399', '其他': '#94a3b8'};
 
+            // === 计算所有品牌的汇总数据 ===
+            var totalCardCalls = 0, totalCardClean = 0, totalCardValid = 0;
+            var totalJxCalls = 0, totalJxClean = 0, totalJxValid = 0;
+            var totalOthCalls = 0, totalOthClean = 0, totalOthValid = 0;
+
+            ['美的', '小天鹅', 'COLMO', '东芝'].forEach(function(brand) {
+                var cross = summary.brand_customer_cross[brand] || {};
+                var cleanData = summary.brand_type_clean[brand] || {};
+                var validData = summary.brand_type_valid[brand] || {};
+                totalCardCalls += cross['客服卡片'] || 0;
+                totalCardClean += cleanData['客服卡片'] || 0;
+                totalCardValid += validData['客服卡片'] || 0;
+                totalJxCalls += cross['家享联盟'] || 0;
+                totalJxClean += cleanData['家享联盟'] || 0;
+                totalJxValid += validData['家享联盟'] || 0;
+                totalOthCalls += cross['其他'] || 0;
+                totalOthClean += cleanData['其他'] || 0;
+                totalOthValid += validData['其他'] || 0;
+            });
+
+            var totalCalls = totalCardCalls + totalJxCalls + totalOthCalls;
+            var totalClean = totalCardClean + totalJxClean + totalOthClean;
+            var totalValid = totalCardValid + totalJxValid + totalOthValid;
+            var totalRate = totalClean > 0 ? (totalValid / totalClean * 100).toFixed(1) : '0.0';
+            var totalRateColor = parseFloat(totalRate) >= 50 ? '#34d399' : (parseFloat(totalRate) >= 30 ? '#fbbf24' : '#f87171');
+
             var html = '';
+
+            // === 汇总卡片（独占一行）===
+            if (brandFilter === 'all') {
+                html += '<div class="brand-grid has-summary" style="margin-bottom:18px">';
+                html += '<div class="brand-card summary-card">';
+
+                // 头部
+                html += '<div class="brand-card-header">';
+                html += '<h4 style="color:#a78bfa"><span style="background:#a78bfa;width:4px;height:18px;border-radius:2px;display:inline-block"></span>📊 全部汇总</h4>';
+                html += '<div class="brand-summary-row">';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#93c5fd">' + totalCalls.toLocaleString() + '</span><span class="label">电话</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#f9a8d4">' + totalClean.toLocaleString() + '</span><span class="label">清洗</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#86efac">' + totalValid.toLocaleString() + '</span><span class="label">有效</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:' + totalRateColor + '">' + totalRate + '%</span><span class="label">有效率</span></div>';
+                html += '</div></div>';
+
+                // 类型拆分行
+                html += '<div class="brand-type-section">';
+                var summaryTypes = [
+                    {name: '客服卡片', calls: totalCardCalls, clean: totalCardClean, valid: totalCardValid},
+                    {name: '家享联盟', calls: totalJxCalls, clean: totalJxClean, valid: totalJxValid},
+                    {name: '其他', calls: totalOthCalls, clean: totalOthClean, valid: totalOthValid}
+                ];
+                summaryTypes.forEach(function(t) {
+                    var tRate = t.clean > 0 ? (t.valid / t.clean * 100).toFixed(1) : '0.0';
+                    var tRateColor = parseFloat(tRate) >= 50 ? '#34d399' : (parseFloat(tRate) >= 30 ? '#fbbf24' : '#f87171');
+                    var barWidth = Math.min(parseFloat(tRate), 100);
+
+                    html += '<div class="brand-type-row">';
+                    html += '<span class="brand-type-dot" style="background:' + typeColors[t.name] + '"></span>';
+                    html += '<span class="brand-type-name" style="color:' + typeColors[t.name] + '">' + t.name + '</span>';
+                    html += '<span class="brand-type-data">';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.calls.toLocaleString() + '</span><span class="unit">电话</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.clean.toLocaleString() + '</span><span class="unit">清洗</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.valid.toLocaleString() + '</span><span class="unit">有效</span></span>';
+                    html += '</span>';
+                    html += '<span class="brand-type-rate-wrap">';
+                    html += '<span class="brand-type-rate" style="color:' + tRateColor + '">' + tRate + '%</span>';
+                    html += '<div class="brand-type-bar"><div class="brand-type-bar-inner" style="width:' + barWidth + '%;background:' + tRateColor + '"></div></div>';
+                    html += '</span>';
+                    html += '</div>';
+                });
+                html += '</div></div></div>';
+            }
+
+            // === 品牌卡片（每行两个）===
+            html += '<div class="brand-grid">';
             brands.forEach(function(brand) {
                 var data = summary.brand_customer_cross[brand] || {};
                 var total = Object.values(data).reduce(function(a, b){return a+b}, 0);
@@ -1338,6 +1421,8 @@
                 });
                 html += '</div></div>';
             });
+            html += '</div>';
+
             document.getElementById('brandDetailGrid').innerHTML = html;
         }
 
