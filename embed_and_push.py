@@ -113,12 +113,11 @@ def main():
     pattern = r'window\.dataVersion\s*=\s*[^;]+;'
     new_html, n = re.subn(pattern, new_version, html_content)
     if n > 0:
+        with open(HTML_FILE, "w", encoding="utf-8") as f:
+            f.write(new_html)
         print(f"  版本号更新为: {timestamp}")
     else:
         print("  WARNING: 未找到 dataVersion，跳过")
-
-    with open(HTML_FILE, "w", encoding="utf-8") as f:
-        f.write(new_html)
 
     # 5. Git 推送
     if no_push:
