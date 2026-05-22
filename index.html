@@ -2,70 +2,90 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-    <meta name="googlebot" content="noindex, nofollow, noarchive">
-    <meta http-equiv="X-Robots-Tag" content="noindex, nofollow">
-    <script>window.dataVersion = '20260520_1626';</script>
+    <script>window.dataVersion = '20260518_1851';</script>
     <title>客服清洗数据看板 - CC+钉钉整合</title>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script>if(typeof echarts==='undefined'){document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"><\/script>');}</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #0a0e1a 0%, #1e293b 50%, #0f172a 100%);
-            color: #f8fafc;
+            background: linear-gradient(135deg, #06080f 0%, #0f172a 40%, #1a1a2e 100%);
+            color: #f1f5f9;
             padding: 20px;
             min-height: 100vh;
         }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body > * { position: relative; z-index: 1; }
         .header {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #db2777 70%, #f43f5e 100%);
-            padding: 44px 40px;
-            border-radius: 22px;
-            margin-bottom: 28px;
+            background: linear-gradient(135deg, #312e81 0%, #4f46e5 25%, #7c3aed 50%, #a855f7 75%, #ec4899 100%);
+            padding: 48px 44px;
+            border-radius: 24px;
+            margin-bottom: 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(79,70,229,0.3), 0 0 80px rgba(219,39,119,0.15);
+            box-shadow: 0 8px 40px rgba(79,70,229,0.35), 0 0 100px rgba(168,85,247,0.12);
+            border: 1px solid rgba(255,255,255,0.08);
         }
         .header::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0%, transparent 40%);
-            animation: headerGlow 8s ease-in-out infinite alternate;
+            top: -60%; left: -30%;
+            width: 160%; height: 220%;
+            background: radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.10) 0%, transparent 55%),
+                        radial-gradient(ellipse at 75% 65%, rgba(255,255,255,0.07) 0%, transparent 45%);
+            animation: headerGlow 10s ease-in-out infinite alternate;
         }
         .header h1 {
-            font-size: 38px;
-            margin-bottom: 10px;
+            font-size: 42px;
+            margin-bottom: 12px;
             position: relative;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+            font-weight: 800;
         }
         .header p {
-            opacity: 0.92;
+            opacity: 0.9;
             position: relative;
             font-size: 15px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.85);
         }
         
         .filter-bar {
-            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(12px);
-            padding: 20px 24px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%);
+            backdrop-filter: blur(16px);
+            padding: 18px 26px;
             border-radius: 18px;
-            margin-bottom: 26px;
+            margin-bottom: 28px;
             display: flex;
-            gap: 22px;
+            gap: 20px;
             align-items: center;
-            flex-wrap: wrap;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+            flex-wrap: nowrap;
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        .filter-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
         }
         .filter-item { display: flex; align-items: center; gap: 8px; }
         .filter-item label { color: #94a3b8; font-size: 14px; }
@@ -127,12 +147,12 @@
             text-transform: uppercase;
         }
         .stat-value {
-            font-size: 42px;
+            font-size: 44px;
             font-weight: 800;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #f1f5f9;
+            text-shadow: 0 0 30px rgba(255,255,255,0.08);
+            letter-spacing: -1px;
         }
         .stat-breakdown {
             color: #94a3b8;
@@ -149,42 +169,63 @@
             margin-bottom: 24px;
         }
         .chart-container {
-            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            background: linear-gradient(145deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.005) 100%);
             padding: 22px;
             border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.07);
             height: 380px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+            border-radius: 18px 18px 0 0;
         }
         .chart-container:hover {
-            border-color: rgba(99,102,241,0.2);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+            border-color: rgba(99,102,241,0.18);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            background: linear-gradient(145deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.008) 100%);
         }
         .chart-container.full-width {
             grid-column: 1 / -1;
             height: 420px;
         }
         .chart-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
         }
         .chart-content {
             height: calc(100% - 35px);
         }
         
         .detail-section {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(12px);
+            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(14px);
             padding: 28px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 26px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 28px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+            position: relative;
+        }
+        .detail-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+            border-radius: 20px 20px 0 0;
         }
         .detail-title {
             font-size: 20px;
@@ -197,48 +238,179 @@
         
         .brand-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .brand-grid.has-summary {
+            grid-template-columns: 1fr;
         }
         .brand-card {
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            border-radius: 12px;
+            padding: 0;
+            border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s;
+            position: relative;
         }
-        .brand-card h4 {
-            font-size: 16px;
-            margin-bottom: 12px;
-            color: #fff;
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
         }
-        .brand-stats {
+        .brand-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .brand-card:nth-child(2)::before { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+        .brand-card:nth-child(3)::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .brand-card:nth-child(4)::before { background: linear-gradient(90deg, #f472b6, #f9a8d4); }
+        .brand-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+        }
+        .brand-card.summary-card {
+            background: linear-gradient(135deg, rgba(99,102,241,0.10) 0%, rgba(167,139,250,0.04) 100%);
+            border: 1px solid rgba(99,102,241,0.20);
+        }
+        .brand-card.summary-card::before {
+            background: linear-gradient(90deg, #6366f1, #a78bfa, #6366f1) !important;
+            height: 3px;
+        }
+        .brand-card-header {
+            padding: 18px 18px 14px;
+            position: relative;
+        }
+        .brand-card-header h4 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0 0 14px 0;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 8px;
+            letter-spacing: 0.5px;
         }
-        .brand-stat-item {
+        .brand-summary-row {
             display: flex;
-            justify-content: space-between;
-            font-size: 13px;
+            gap: 6px;
         }
-        .brand-stat-label { color: #94a3b8; }
-        .brand-stat-value { color: #fff; font-weight: 600; }
+        .brand-summary-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px 4px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.04);
+        }
+        .brand-summary-item .value {
+            font-size: 18px;
+            font-weight: 800;
+            display: block;
+            line-height: 1.2;
+        }
+        .brand-summary-item .label {
+            font-size: 10px;
+            color: #64748b;
+            display: block;
+            margin-top: 2px;
+        }
+        .brand-type-section {
+            padding: 8px 14px 16px;
+        }
+        .brand-type-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            margin: 3px 0;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.02);
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        .brand-type-row:hover {
+            background: rgba(255,255,255,0.06);
+        }
+        .brand-type-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            box-shadow: 0 0 6px rgba(255,255,255,0.15);
+        }
+        .brand-type-name {
+            font-size: 12px;
+            font-weight: 600;
+            width: 64px;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+        .brand-type-data {
+            display: flex;
+            flex: 1;
+            gap: 6px;
+            justify-content: space-around;
+        }
+        .brand-type-cell {
+            text-align: center;
+            width: 58px;
+            padding: 2px 0;
+        }
+        .brand-type-cell .num {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e2e8f0;
+            display: block;
+            line-height: 1.4;
+        }
+        .brand-type-cell .unit {
+            font-size: 9px;
+            color: #475569;
+            letter-spacing: 0.5px;
+        }
+        .brand-type-rate-wrap {
+            width: 60px;
+            text-align: right;
+            flex-shrink: 0;
+
+        }
+        .brand-type-rate {
+            font-size: 14px;
+            font-weight: 800;
+        }
+        .brand-type-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.06);
+            margin-top: 3px;
+            overflow: hidden;
+        }
+        .brand-type-bar-inner {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
         
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; display: block; overflow-x: auto; white-space: nowrap; }
+        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
         .data-table th, .data-table td {
-            padding: 12px 16px;
+            padding: 13px 18px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .data-table th {
-            color: #94a3b8;
-            font-weight: 500;
-            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            background: rgba(15,23,42,0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1;
         }
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; display: block; overflow-x: auto; white-space: nowrap; }
-        .data-table td { color: #f8fafc; }
-        .data-table tr:hover { background: rgba(255,255,255,0.03); }
+        .data-table td { color: #e2e8f0; font-size: 13px; }
+        .data-table tbody tr {
+            transition: background 0.15s ease;
+        }
+        .data-table tbody tr:hover { background: rgba(99,102,241,0.06); }
+        .data-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.008); }
 
         /* 客服工作量排行 - 卡片式布局（美化版） */
         .visitor-cards {
@@ -361,10 +533,216 @@
             from { transform: translate(0, 0); }
             to { transform: translate(2%, -2%); }
         }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        /* 页面载入动画 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .header    { animation: fadeInUp 0.5s ease 0.05s both; }
+        .filter-bar  { animation: fadeInUp 0.5s ease 0.12s both; }
+        .stats-grid  { animation: fadeInUp 0.5s ease 0.2s both; }
+        .charts-grid  { animation: fadeInUp 0.5s ease 0.3s both; }
+        .detail-section { animation: fadeInUp 0.5s ease 0.4s both; }
+
+        /* ===== 登录页面美化 ===== */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #06080f 0%, #0f172a 50%, #1a1a2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #login-overlay::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+            pointer-events: none;
+        }
+        #login-overlay::after {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(99,102,241,0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(168,85,247,0.04) 0%, transparent 50%);
+            animation: loginBgFloat 15s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes loginBgFloat {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(2%, -3%) rotate(2deg); }
+        }
+        #login-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 28px;
+            padding: 50px 48px 44px;
+            width: 400px;
+            max-width: 90vw;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 80px rgba(99,102,241,0.08);
+            animation: loginBoxIn 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        #login-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        }
+        @keyframes loginBoxIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .login-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 22px;
+            box-shadow: 0 8px 24px rgba(79,70,229,0.35);
+            position: relative;
+        }
+        .login-icon::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(79,70,229,0.3), rgba(124,58,237,0.3));
+            z-index: -1;
+            filter: blur(8px);
+        }
+        #login-box h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            background: linear-gradient(135deg, #e2e8f0, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #login-box p {
+            color: #64748b;
+            font-size: 15px;
+            margin: 0 0 32px;
+            letter-spacing: 0.3px;
+        }
+        .login-input-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .login-input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        #login-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background: rgba(255,255,255,0.06);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            color: #e2e8f0;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        #login-input:focus {
+            border-color: #6366f1;
+            background: rgba(99,102,241,0.08);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
+        }
+        #login-input::placeholder {
+            color: #475569;
+            letter-spacing: 0.5px;
+        }
+        #login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        #login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        #login-btn:hover::before {
+            left: 100%;
+        }
+        #login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(79,70,229,0.4);
+        }
+        #login-btn:active {
+            transform: translateY(0);
+        }
+        #login-error {
+            color: #f87171;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+            padding: 10px 16px;
+            background: rgba(239,68,68,0.10);
+            border-radius: 10px;
+            border: 1px solid rgba(239,68,68,0.15);
+            letter-spacing: 0.3px;
+        }
     </style>
 </head>
 <body>
-    <div id="app" style="display:none">
+
+<!-- 登录遮罩 -->
+<div id="login-overlay">
+  <div id="login-box">
+    <div class="login-icon">&#x1F510;</div>
+    <h2>身份验证</h2>
+    <p>请输入访问密码以查看看板</p>
+    <div class="login-input-wrap">
+      <input type="password" id="login-input" placeholder="请输入密码" autofocus>
+      <span class="login-input-icon">&#x1F512;</span>
+    </div>
+    <button id="login-btn">确认访问</button>
+    <div id="login-error">&#x26A0;&#xFE0F; 密码错误，请重试</div>
+  </div>
+</div>
+
+<div id="app">
     <div class="header">
         <h1>📊 客服清洗数据看板</h1>
         <p>CC系统 + 钉钉跟进 | 品牌×客资类型交叉分析</p>
@@ -387,15 +765,6 @@
                 <option value="小天鹅">小天鹅</option>
                 <option value="COLMO">COLMO</option>
                 <option value="东芝">东芝</option>
-            </select>
-        </div>
-        <div class="filter-item">
-            <label>品类筛选</label>
-            <select id="typeFilter" onchange="applyFilter()">
-                <option value="all">全部品类</option>
-                <option value="客服卡片">客服卡片</option>
-                <option value="家享联盟">家享联盟</option>
-                <option value="其他">其他</option>
             </select>
         </div>
     </div>
@@ -426,11 +795,17 @@
         </div>
     </div>
 
+    <div class="chart-container full-width" style="margin-bottom:20px">
+        <div class="chart-title">📈 数据趋势分析</div>
+        <div class="chart-content" id="trendChart"></div>
+    </div>
+
+    <div class="detail-section">
+        <div class="detail-title"><span>🏢</span> 各品牌客资明细</div>
+        <div id="brandDetailGrid"></div>
+    </div>
+
     <div class="charts-grid">
-        <div class="chart-container full-width">
-            <div class="chart-title">📈 数据趋势分析</div>
-            <div class="chart-content" id="trendChart"></div>
-        </div>
         <div class="chart-container">
             <div class="chart-title">🏷️ 品牌分布</div>
             <div class="chart-content" id="brandChart"></div>
@@ -447,11 +822,26 @@
             <div class="chart-title">⚡ 客服处理量 TOP10</div>
             <div class="chart-content" id="visitorChart"></div>
         </div>
-    </div>
-
-    <div class="detail-section">
-        <div class="detail-title"><span>🏢</span> 各品牌客资明细</div>
-        <div class="brand-grid" id="brandDetailGrid"></div>
+        <div class="chart-container">
+            <div class="chart-title">🔀 CC vs 钉钉双渠道对比</div>
+            <div class="chart-content" id="channelChart"></div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">🔽 外呼状态漏斗</div>
+            <div class="chart-content" id="funnelChart"></div>
+        </div>
+        <div class="chart-container full-width">
+            <div class="chart-title">📈 品牌清洗量趋势</div>
+            <div class="chart-content" id="brandTrendChart"></div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">📊 客服客资类型构成</div>
+            <div class="chart-content" id="visitorTypeChart"></div>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">📉 清洗量/有效量双轴趋势</div>
+            <div class="chart-content" id="dualAxisChart"></div>
+        </div>
     </div>
 
     <div class="detail-section">
@@ -460,8 +850,10 @@
     </div>
 
     <script>
-        var dashboardData = null;
-        let trendChart, brandChart, customerTypeChart, heatmapChart, visitorChart;
+        // 加密数据由 embed_and_push.py 替换 __ENCRYPTED_DATA__
+var DATA; // 解密后的看板数据
+
+        let trendChart, brandChart, customerTypeChart, heatmapChart, visitorChart, channelChart, funnelChart, brandTrendChart, visitorTypeChart, dualAxisChart;
 
         function init() {
             initDatePicker();
@@ -470,8 +862,7 @@
         }
 
         function initDatePicker() {
-            if (!dashboardData || !dashboardData.length) return;
-            const dates = dashboardData.map(d => d['日期']);
+            const dates = DATA.map(d => d['日期']);
             document.getElementById('startDate').min = dates[0];
             document.getElementById('startDate').max = dates[dates.length - 1];
             document.getElementById('startDate').value = dates[0];
@@ -486,10 +877,15 @@
             customerTypeChart = echarts.init(document.getElementById('customerTypeChart'));
             heatmapChart = echarts.init(document.getElementById('heatmapChart'));
             visitorChart = echarts.init(document.getElementById('visitorChart'));
+            channelChart = echarts.init(document.getElementById('channelChart'));
+            funnelChart = echarts.init(document.getElementById('funnelChart'));
+            brandTrendChart = echarts.init(document.getElementById('brandTrendChart'));
+            visitorTypeChart = echarts.init(document.getElementById('visitorTypeChart'));
+            dualAxisChart = echarts.init(document.getElementById('dualAxisChart'));
         }
 
-        function mergeData(startDate, endDate, brandFilter, typeFilter) {
-            let filtered = dashboardData.filter(d => d['日期'] >= startDate && d['日期'] <= endDate);
+        function mergeData(startDate, endDate, brandFilter) {
+            let filtered = DATA.filter(d => d['日期'] >= startDate && d['日期'] <= endDate);
             
             const summary = {
                 kezi_count: 0,
@@ -505,18 +901,32 @@
                 brand_distribution: {},
                 customer_type_distribution: {},
                 visitor_stats: {},
+                // 品牌维度：客资量
+                brand_kezi: {},
+                // 品牌维度：电话量/清洗量/有效量
+                brand_calls: {},
+                brand_clean: {},
+                brand_valid: {},
+                // 品牌×客资类型：清洗量/有效量
+                brand_type_clean: {},
+                brand_type_valid: {},
+                // 回访人维度：电话量/清洗量/有效量
                 visitor_calls: {},
                 visitor_clean: {},
                 visitor_valid: {},
+                // 回访人维度：按客资类型拆分
                 visitor_type_detail: {},
+                // 回访人维度：按客资类型拆分的清洗量/有效量
                 visitor_type_clean: {},
                 visitor_type_valid: {},
                 brand_customer_cross: {},
+                brand_type_kezi: {},
+                call_status: {},
                 daily_data: filtered
             };
             
             filtered.forEach(day => {
-                // 合并指标（支持品牌+品类筛选）
+                // 合并指标（支持品牌筛选）
                 if (brandFilter === 'all') {
                     summary.kezi_count += (day['客资量'] || 0);
                     summary.total_calls += day['总电话量'];
@@ -529,20 +939,68 @@
                     summary.valid_count_cc += day['有效量_CC'];
                     summary.valid_count_dd += day['有效量_钉钉'];
 
+                    // 品牌分布
                     Object.entries(day['品牌分布']).forEach(([brand, count]) => {
                         summary.brand_distribution[brand] = (summary.brand_distribution[brand] || 0) + count;
                     });
-                    
-                    Object.entries(day['客资类型分布']).forEach(([type, count]) => {
-                        if (typeFilter === 'all' || type === typeFilter) {
-                            summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
+
+                    // 品牌维度：客资量/电话量/清洗量/有效量
+                    var keziBrand = day['客资量_品牌'] || {};
+                    var ccBrandDist = day['品牌分布_CC'] || {};
+                    var ddBrandDist = day['品牌分布_钉钉'] || {};
+                    ['美的', '小天鹅', 'COLMO', '东芝'].forEach(function(brand) {
+                        summary.brand_kezi[brand] = (summary.brand_kezi[brand] || 0) + (keziBrand[brand] || 0);
+                        summary.brand_calls[brand] = (summary.brand_calls[brand] || 0) + (ccBrandDist[brand] || 0) + (ddBrandDist[brand] || 0);
+                        summary.brand_clean[brand] = (summary.brand_clean[brand] || 0) + ((day['品牌清洗量'] || {})[brand] || 0);
+                        summary.brand_valid[brand] = (summary.brand_valid[brand] || 0) + ((day['品牌有效量'] || {})[brand] || 0);
+                    });
+
+                    // 品牌×客资类型：客资量/清洗量/有效量累加
+                    var btk = day['品牌_类型_客资量'] || {};
+                    var btc = day['品牌_类型_清洗量'] || {};
+                    var btv = day['品牌_类型_有效量'] || {};
+                    ['美的', '小天鹅', 'COLMO', '东芝'].forEach(function(brand) {
+                        if (!summary.brand_type_kezi[brand]) {
+                            summary.brand_type_kezi[brand] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
                         }
+                        if (!summary.brand_type_clean[brand]) {
+                            summary.brand_type_clean[brand] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
+                        }
+                        if (!summary.brand_type_valid[brand]) {
+                            summary.brand_type_valid[brand] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
+                        }
+                        var bk = btk[brand] || {};
+                        var bc = btc[brand] || {};
+                        var bv = btv[brand] || {};
+                        // 客资量：只有客服卡片、家享联盟、其他（留资表无智投）
+                        summary.brand_type_kezi[brand]['客服卡片'] += (bk['客服卡片'] || 0);
+                        summary.brand_type_kezi[brand]['家享联盟'] += (bk['家享联盟'] || 0);
+                        summary.brand_type_kezi[brand]['其他'] += (bk['其他'] || 0);
+                        // 清洗量/有效量：智投线索通数据合并到"其他"
+                        summary.brand_type_clean[brand]['客服卡片'] += (bc['客服卡片'] || 0);
+                        summary.brand_type_clean[brand]['家享联盟'] += (bc['家享联盟'] || 0);
+                        summary.brand_type_clean[brand]['其他'] += (bc['其他'] || 0) + (bc['智投线索通'] || 0);
+                        summary.brand_type_valid[brand]['客服卡片'] += (bv['客服卡片'] || 0);
+                        summary.brand_type_valid[brand]['家享联盟'] += (bv['家享联盟'] || 0);
+                        summary.brand_type_valid[brand]['其他'] += (bv['其他'] || 0) + (bv['智投线索通'] || 0);
+                    });
+
+                    // 客资类型分布
+                    Object.entries(day['客资类型分布']).forEach(([type, count]) => {
+                        summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
                     });
                     
+                    // 外呼状态
+                    Object.entries(day['外呼状态'] || {}).forEach(([status, count]) => {
+                        summary.call_status[status] = (summary.call_status[status] || 0) + count;
+                    });
+
+                    // 回访人统计
                     Object.entries(day['回访人统计']).forEach(([visitor, count]) => {
                         summary.visitor_stats[visitor] = (summary.visitor_stats[visitor] || 0) + count;
                     });
                     
+                    // 回访人维度：电话量/清洗量/有效量
                     Object.entries(day['回访人_电话量'] || {}).forEach(([visitor, count]) => {
                         summary.visitor_calls[visitor] = (summary.visitor_calls[visitor] || 0) + count;
                     });
@@ -553,150 +1011,182 @@
                         summary.visitor_valid[visitor] = (summary.visitor_valid[visitor] || 0) + count;
                     });
                     
-                    ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
-                        if (typeFilter !== 'all' && t !== typeFilter) return;
+                    // 回访人维度：按客资类型拆分（从JSON字段直接取）
+                    ['客服卡片', '家享联盟', '其他'].forEach(function(type) {
+                        // 按类型电话量
                         var tc = day['回访人_类型_电话量'] || {};
                         Object.entries(tc).forEach(([v, c]) => {
                             if (!summary.visitor_type_detail[v]) { summary.visitor_type_detail[v] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (c && typeof c === 'object') { summary.visitor_type_detail[v][t] += (c[t] || 0); }
-                            else { summary.visitor_type_detail[v][t] += c || 0; }
+                            if (c && typeof c === 'object') { summary.visitor_type_detail[v][type] += (c[type] || 0); }
+                            else { summary.visitor_type_detail[v]['客服卡片'] += c || 0; }  // fallback
                         });
+                        // 按类型清洗量
                         var cl = day['回访人_类型_清洗量'] || {};
                         Object.entries(cl).forEach(([v, c]) => {
                             if (!summary.visitor_type_clean[v]) { summary.visitor_type_clean[v] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (c && typeof c === 'object') { summary.visitor_type_clean[v][t] += (c[t] || 0); }
-                            else { summary.visitor_type_clean[v][t] += c || 0; }
+                            if (c && typeof c === 'object') { summary.visitor_type_clean[v][type] += (c[type] || 0); }
+                            else { summary.visitor_type_clean[v]['客服卡片'] += c || 0; }
                         });
+                        // 按类型有效量
                         var vl = day['回访人_类型_有效量'] || {};
                         Object.entries(vl).forEach(([v, c]) => {
                             if (!summary.visitor_type_valid[v]) { summary.visitor_type_valid[v] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (c && typeof c === 'object') { summary.visitor_type_valid[v][t] += (c[t] || 0); }
-                            else { summary.visitor_type_valid[v][t] += c || 0; }
+                            if (c && typeof c === 'object') { summary.visitor_type_valid[v][type] += (c[type] || 0); }
+                            else { summary.visitor_type_valid[v]['客服卡片'] += c || 0; }
                         });
                     });
                     
+                    // 品牌客资交叉
                     Object.entries(day['品牌客资交叉']).forEach(([brand, types]) => {
                         if (!summary.brand_customer_cross[brand]) {
                             summary.brand_customer_cross[brand] = {};
                         }
                         Object.entries(types).forEach(([type, count]) => {
-                            if (typeFilter === 'all' || type === typeFilter) {
-                                summary.brand_customer_cross[brand][type] = (summary.brand_customer_cross[brand][type] || 0) + count;
-                            }
+                            summary.brand_customer_cross[brand][type] = (summary.brand_customer_cross[brand][type] || 0) + count;
                         });
                     });
                 } else {
+                    // 按品牌筛选：只取该品牌的数据
+                    const brandDist = day['品牌分布_钉钉'] || {};
                     const ccBrandDist = day['品牌分布_CC'] || {};
                     const ddBrandDist = day['品牌分布_钉钉'] || {};
                     const crossCC = day['品牌客资交叉_CC'] || {};
                     const crossDD = day['品牌客资交叉_钉钉'] || {};
+                    const visitorCC = day['回访人统计_CC'] || {};
+                    const visitorDD = day['回访人统计_钉钉'] || {};
+
+                    // 该品牌的客资量（从每日留资表的品牌明细中取值）
                     const keziBrand = day['客资量_品牌'] || {};
                     summary.kezi_count += (keziBrand[brandFilter] || 0);
 
+                    // 该品牌的电话量
                     summary.total_calls += (ccBrandDist[brandFilter] || 0) + (ddBrandDist[brandFilter] || 0);
                     summary.total_calls_cc += ccBrandDist[brandFilter] || 0;
                     summary.total_calls_dd += ddBrandDist[brandFilter] || 0;
 
-                    // 按品类筛选时，只统计该品类的交叉数据
-                    const crossCCTotal = typeFilter === 'all'
-                        ? Object.values(crossCC[brandFilter] || {}).reduce((a,b)=>a+b, 0)
-                        : (crossCC[brandFilter] || {})[typeFilter] || 0;
-                    const crossDDTotal = typeFilter === 'all'
-                        ? Object.values(crossDD[brandFilter] || {}).reduce((a,b)=>a+b, 0)
-                        : (crossDD[brandFilter] || {})[typeFilter] || 0;
-                    summary.clean_count += crossCCTotal + crossDDTotal;
-                    summary.clean_count_cc += crossCCTotal;
-                    summary.clean_count_dd += crossDDTotal;
+                    // 清洗量：直接从后端字段取值（精确）
+                    summary.clean_count += (day['品牌清洗量'] || {})[brandFilter] || 0;
+                    summary.clean_count_cc += (day['品牌清洗量_CC'] || {})[brandFilter] || 0;
+                    summary.clean_count_dd += (day['品牌清洗量_钉钉'] || {})[brandFilter] || 0;
 
-                    const dayValidRate = day['有效率'] > 0 ? day['有效率'] / 100 : 0;
-                    summary.valid_count += Math.round((crossCCTotal + crossDDTotal) * dayValidRate);
+                    // 有效量：直接从后端字段取值（精确）
+                    summary.valid_count += (day['品牌有效量'] || {})[brandFilter] || 0;
+                    summary.valid_count_cc += (day['品牌有效量_CC'] || {})[brandFilter] || 0;
+                    summary.valid_count_dd += (day['品牌有效量_钉钉'] || {})[brandFilter] || 0;
 
+                    // 品牌×类型：客资量/清洗量/有效量（品牌筛选模式）
+                    if (!summary.brand_type_kezi[brandFilter]) {
+                        summary.brand_type_kezi[brandFilter] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
+                    }
+                    if (!summary.brand_type_clean[brandFilter]) {
+                        summary.brand_type_clean[brandFilter] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
+                    }
+                    if (!summary.brand_type_valid[brandFilter]) {
+                        summary.brand_type_valid[brandFilter] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
+                    }
+                    var btk2 = (day['品牌_类型_客资量'] || {})[brandFilter] || {};
+                    var btc2 = (day['品牌_类型_清洗量'] || {})[brandFilter] || {};
+                    var btv2 = (day['品牌_类型_有效量'] || {})[brandFilter] || {};
+                    // 客资量：留资表无智投线索通
+                    summary.brand_type_kezi[brandFilter]['客服卡片'] += (btk2['客服卡片'] || 0);
+                    summary.brand_type_kezi[brandFilter]['家享联盟'] += (btk2['家享联盟'] || 0);
+                    summary.brand_type_kezi[brandFilter]['其他'] += (btk2['其他'] || 0);
+                    // 清洗量/有效量：智投线索通合并到"其他"
+                    summary.brand_type_clean[brandFilter]['客服卡片'] += (btc2['客服卡片'] || 0);
+                    summary.brand_type_clean[brandFilter]['家享联盟'] += (btc2['家享联盟'] || 0);
+                    summary.brand_type_clean[brandFilter]['其他'] += (btc2['其他'] || 0) + (btc2['智投线索通'] || 0);
+                    summary.brand_type_valid[brandFilter]['客服卡片'] += (btv2['客服卡片'] || 0);
+                    summary.brand_type_valid[brandFilter]['家享联盟'] += (btv2['家享联盟'] || 0);
+                    summary.brand_type_valid[brandFilter]['其他'] += (btv2['其他'] || 0) + (btv2['智投线索通'] || 0);
+
+                    // 品牌分布（只有选中的品牌）
                     summary.brand_distribution[brandFilter] = (summary.brand_distribution[brandFilter] || 0)
                         + (ccBrandDist[brandFilter] || 0) + (ddBrandDist[brandFilter] || 0);
                     
-                    if (typeFilter === 'all') {
-                        if (crossCC[brandFilter]) {
-                            Object.entries(crossCC[brandFilter]).forEach(([type, count]) => {
-                                summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
-                            });
-                        }
-                        if (crossDD[brandFilter]) {
-                            Object.entries(crossDD[brandFilter]).forEach(([type, count]) => {
-                                summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
-                            });
-                        }
-                    } else {
-                        summary.customer_type_distribution[typeFilter] = crossCCTotal + crossDDTotal;
+                    // 客资类型分布（只取选中品牌的）
+                    if (crossCC[brandFilter]) {
+                        Object.entries(crossCC[brandFilter]).forEach(([type, count]) => {
+                            summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
+                        });
+                    }
+                    if (crossDD[brandFilter]) {
+                        Object.entries(crossDD[brandFilter]).forEach(([type, count]) => {
+                            summary.customer_type_distribution[type] = (summary.customer_type_distribution[type] || 0) + count;
+                        });
                     }
 
+                    // 回访人统计：从三维交叉表按品牌汇总（替代原来用全品牌回访人统计_CC/钉钉的bug）
                     var vbtForStats = day['回访人_品牌_类型'] || {};
                     Object.entries(vbtForStats).forEach(([visitor, brands_data]) => {
                         if (brands_data[brandFilter]) {
                             var btStat = brands_data[brandFilter];
-                            if (typeFilter === 'all') {
-                                var statTotal = Object.values(btStat).reduce(function(a,b){return a+b;}, 0);
-                                summary.visitor_stats[visitor] = (summary.visitor_stats[visitor] || 0) + statTotal;
-                            } else {
-                                summary.visitor_stats[visitor] = (summary.visitor_stats[visitor] || 0) + (btStat[typeFilter] || 0);
-                            }
+                            var statTotal = Object.values(btStat).reduce(function(a,b){return a+b;}, 0);
+                            summary.visitor_stats[visitor] = (summary.visitor_stats[visitor] || 0) + statTotal;
                         }
                     });
 
-                    var vbt = day['回访人_品牌_类型'] || {};
-                    var vbtClean = day['回访人_品牌_类型_清洗量'] || {};
-                    var vbtValid = day['回访人_品牌_类型_有效量'] || {};
-                    Object.entries(vbt).forEach(([visitor, brands_data]) => {
+                    // 品牌筛选时：从三维交叉表汇总每个人的电话量/清洗量/有效量
+                    var vbt_calls = day['回访人_品牌_类型'] || {};
+                    var vbt_clean = day['回访人_品牌_类型_清洗量'] || {};
+                    var vbt_valid = day['回访人_品牌_类型_有效量'] || {};
+
+                    Object.entries(vbt_calls).forEach(([visitor, brands_data]) => {
                         if (brands_data[brandFilter]) {
                             var bt = brands_data[brandFilter];
-                            var btCl = (vbtClean[visitor] && vbtClean[visitor][brandFilter]) || {};
-                            var btVl = (vbtValid[visitor] && vbtValid[visitor][brandFilter]) || {};
-                            var pTotal = typeFilter === 'all'
-                                ? Object.values(bt).reduce(function(a,b){return a+b;}, 0)
-                                : (bt[typeFilter] || 0);
-                            var pClean = typeFilter === 'all'
-                                ? Object.values(btCl).reduce(function(a,b){return a+b;}, 0)
-                                : (btCl[typeFilter] || 0);
-                            var pValid = typeFilter === 'all'
-                                ? Object.values(btVl).reduce(function(a,b){return a+b;}, 0)
-                                : (btVl[typeFilter] || 0);
+                            // 电话量
+                            var pTotal = Object.values(bt).reduce(function(a,b){return a+b;}, 0);
                             summary.visitor_calls[visitor] = (summary.visitor_calls[visitor] || 0) + pTotal;
-                            summary.visitor_clean[visitor] = (summary.visitor_clean[visitor] || 0) + pClean;
-                            summary.visitor_valid[visitor] = (summary.visitor_valid[visitor] || 0) + pValid;
-                            
+
+                            // 按客资类型拆分（电话量）
                             if (!summary.visitor_type_detail[visitor]) { summary.visitor_type_detail[visitor] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (!summary.visitor_type_clean[visitor]) { summary.visitor_type_clean[visitor] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (!summary.visitor_type_valid[visitor]) { summary.visitor_type_valid[visitor] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
-                            if (typeFilter === 'all') {
-                                ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
-                                    summary.visitor_type_detail[visitor][t] += (bt[t] || 0);
-                                    summary.visitor_type_clean[visitor][t] += (btCl[t] || 0);
-                                    summary.visitor_type_valid[visitor][t] += (btVl[t] || 0);
-                                });
-                            } else {
-                                summary.visitor_type_detail[visitor][typeFilter] += pTotal;
-                                summary.visitor_type_clean[visitor][typeFilter] += pClean;
-                                summary.visitor_type_valid[visitor][typeFilter] += pValid;
-                            }
+                            ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
+                                summary.visitor_type_detail[visitor][t] += (bt[t] || 0);
+                            });
                         }
                     });
 
+                    // 清洗量（从三维交叉表精确取值）
+                    Object.entries(vbt_clean).forEach(([visitor, brands_data]) => {
+                        if (brands_data[brandFilter]) {
+                            var btC = brands_data[brandFilter];
+                            var cTotal = Object.values(btC).reduce(function(a,b){return a+b;}, 0);
+                            summary.visitor_clean[visitor] = (summary.visitor_clean[visitor] || 0) + cTotal;
+
+                            if (!summary.visitor_type_clean[visitor]) { summary.visitor_type_clean[visitor] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
+                            ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
+                                summary.visitor_type_clean[visitor][t] += (btC[t] || 0);
+                            });
+                        }
+                    });
+
+                    // 有效量（从三维交叉表精确取值）
+                    Object.entries(vbt_valid).forEach(([visitor, brands_data]) => {
+                        if (brands_data[brandFilter]) {
+                            var btV = brands_data[brandFilter];
+                            var vTotal = Object.values(btV).reduce(function(a,b){return a+b;}, 0);
+                            summary.visitor_valid[visitor] = (summary.visitor_valid[visitor] || 0) + vTotal;
+
+                            if (!summary.visitor_type_valid[visitor]) { summary.visitor_type_valid[visitor] = {'客服卡片': 0, '家享联盟': 0, '其他': 0}; }
+                            ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
+                                summary.visitor_type_valid[visitor][t] += (btV[t] || 0);
+                            });
+                        }
+                    });
+
+                    // 品牌客资交叉
                     if (!summary.brand_customer_cross[brandFilter]) {
                         summary.brand_customer_cross[brandFilter] = {'客服卡片': 0, '家享联盟': 0, '其他': 0};
                     }
                     if (crossCC[brandFilter]) {
                         Object.entries(crossCC[brandFilter]).forEach(([type, count]) => {
-                            if (typeFilter === 'all' || type === typeFilter) {
-                                summary.brand_customer_cross[brandFilter][type] =
-                                    (summary.brand_customer_cross[brandFilter][type] || 0) + count;
-                            }
+                            summary.brand_customer_cross[brandFilter][type] =
+                                (summary.brand_customer_cross[brandFilter][type] || 0) + count;
                         });
                     }
                     if (crossDD[brandFilter]) {
                         Object.entries(crossDD[brandFilter]).forEach(([type, count]) => {
-                            if (typeFilter === 'all' || type === typeFilter) {
-                                summary.brand_customer_cross[brandFilter][type] =
-                                    (summary.brand_customer_cross[brandFilter][type] || 0) + count;
-                            }
+                            summary.brand_customer_cross[brandFilter][type] =
+                                (summary.brand_customer_cross[brandFilter][type] || 0) + count;
                         });
                     }
                 }
@@ -708,13 +1198,11 @@
         }
 
         function applyFilter() {
-            if (!dashboardData || !dashboardData.length) return;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const brandFilter = document.getElementById('brandFilter').value;
-            const typeFilter = document.getElementById('typeFilter').value;
             
-            const summary = mergeData(startDate, endDate, brandFilter, typeFilter);
+            const summary = mergeData(startDate, endDate, brandFilter);
             
             // 更新统计卡片 - 显示CC和钉钉分别的数据
             document.getElementById('keziCount').textContent = summary.kezi_count.toLocaleString();
@@ -734,75 +1222,95 @@
                 '<span class="cc-tag">CC: ' + summary.valid_count_cc.toLocaleString() +
                 '</span>&nbsp;&nbsp;<span class="dd-tag">钉钉: ' + summary.valid_count_dd.toLocaleString() + '</span>';
             
-            updateCharts(summary, brandFilter, typeFilter);
-            updateBrandDetail(summary, brandFilter, typeFilter);
-            updateVisitorTable(summary, typeFilter);
+            updateCharts(summary, brandFilter);
+            updateBrandDetail(summary, brandFilter);
+            updateVisitorTable(summary);
         }
 
-        function updateCharts(summary, brandFilter, typeFilter) {
+        function updateCharts(summary, brandFilter) {
             const dates = summary.daily_data.map(d => d['日期'].slice(5));
             
-            // 趋势图 - 按品类筛选时只显示该品类的数据趋势
-            var trendSeries = [];
-            if (typeFilter === 'all') {
-                trendSeries = [
+            // 趋势图 - 带渐变填充的面积图（显示合并后的数据）
+            trendChart.setOption({
+                tooltip: { trigger: 'axis', backgroundColor: 'rgba(15,23,42,0.95)', borderColor: '#334155', textStyle: { color: '#fff' } },
+                legend: { data: ['客资量', '总电话量', '清洗量', '有效量'], bottom: 10, textStyle: { color: '#94a3b8' } },
+                grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+                xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#334155' } }, axisLabel: { color: '#94a3b8' } },
+                yAxis: { type: 'value', axisLine: { lineStyle: { color: '#334155' } }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: '#1e293b' } } },
+                series: [
                     {
                         name: '客资量', type: 'line',
                         data: summary.daily_data.map(function(d) { return d['客资量'] || 0; }),
                         smooth: true, symbol: 'circle', symbolSize: 6,
                         lineStyle: { width: 3, color: '#a78bfa' },
                         itemStyle: { color: '#a78bfa', borderWidth: 2, borderColor: '#fff' },
-                        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(167, 139, 250, 0.4)' }, { offset: 1, color: 'rgba(167, 139, 250, 0.05)' }]) }
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(167, 139, 250, 0.4)' },
+                                { offset: 1, color: 'rgba(167, 139, 250, 0.05)' }
+                            ])
+                        }
                     },
-                    { name: '总电话量', type: 'line', data: summary.daily_data.map(function(d) { return d['总电话量']; }), smooth: true, symbol: 'circle', symbolSize: 6,
-                        lineStyle: { width: 3, color: '#60a5fa' }, itemStyle: { color: '#60a5fa', borderWidth: 2, borderColor: '#fff' },
-                        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(96, 165, 250, 0.4)' }, { offset: 1, color: 'rgba(96, 165, 250, 0.05)' }]) } },
-                    { name: '清洗量', type: 'line', data: summary.daily_data.map(function(d) { return d['清洗量']; }), smooth: true, symbol: 'circle', symbolSize: 6,
-                        lineStyle: { width: 3, color: '#f472b6' }, itemStyle: { color: '#f472b6', borderWidth: 2, borderColor: '#fff' },
-                        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(244, 114, 182, 0.4)' }, { offset: 1, color: 'rgba(244, 114, 182, 0.05)' }]) } },
-                    { name: '有效量', type: 'line', data: summary.daily_data.map(function(d) { return d['有效量']; }), smooth: true, symbol: 'circle', symbolSize: 6,
-                        lineStyle: { width: 3, color: '#34d399' }, itemStyle: { color: '#34d399', borderWidth: 2, borderColor: '#fff' },
-                        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(52, 211, 153, 0.4)' }, { offset: 1, color: 'rgba(52, 211, 153, 0.05)' }]) } }
-                ];
-            } else {
-                trendSeries = [{
-                    name: typeFilter, type: 'line',
-                    data: summary.daily_data.map(function(d) {
-                        return (d['客资类型分布'] && d['客资类型分布'][typeFilter]) || 0;
-                    }),
-                    smooth: true, symbol: 'circle', symbolSize: 6,
-                    lineStyle: { width: 3, color: '#a78bfa' },
-                    itemStyle: { color: '#a78bfa', borderWidth: 2, borderColor: '#fff' },
-                    areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(167, 139, 250, 0.4)' }, { offset: 1, color: 'rgba(167, 139, 250, 0.05)' }]) }
-                }];
-            }
-            trendChart.setOption({
-                tooltip: { trigger: 'axis', backgroundColor: 'rgba(15,23,42,0.95)', borderColor: '#334155', textStyle: { color: '#fff' } },
-                legend: { data: typeFilter === 'all' ? ['客资量', '总电话量', '清洗量', '有效量'] : [typeFilter], bottom: 10, textStyle: { color: '#94a3b8' } },
-                grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
-                xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#334155' } }, axisLabel: { color: '#94a3b8' } },
-                yAxis: { type: 'value', axisLine: { lineStyle: { color: '#334155' } }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: '#1e293b' } } },
-                series: trendSeries
+                    { 
+                        name: '总电话量', type: 'line', 
+                        data: summary.daily_data.map(function(d) { return d['总电话量']; }), 
+                        smooth: true, symbol: 'circle', symbolSize: 6,
+                        lineStyle: { width: 3, color: '#60a5fa' },
+                        itemStyle: { color: '#60a5fa', borderWidth: 2, borderColor: '#fff' },
+                        areaStyle: { 
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(96, 165, 250, 0.4)' },
+                                { offset: 1, color: 'rgba(96, 165, 250, 0.05)' }
+                            ])
+                        }
+                    },
+                    { 
+                        name: '清洗量', type: 'line',
+                        data: summary.daily_data.map(function(d) { return d['清洗量']; }), 
+                        smooth: true, symbol: 'circle', symbolSize: 6,
+                        lineStyle: { width: 3, color: '#f472b6' },
+                        itemStyle: { color: '#f472b6', borderWidth: 2, borderColor: '#fff' },
+                        areaStyle: { 
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(244, 114, 182, 0.4)' },
+                                { offset: 1, color: 'rgba(244, 114, 182, 0.05)' }
+                            ])
+                        }
+                    },
+                    { 
+                        name: '有效量', type: 'line',
+                        data: summary.daily_data.map(function(d) { return d['有效量']; }), 
+                        smooth: true, symbol: 'circle', symbolSize: 6,
+                        lineStyle: { width: 3, color: '#34d399' },
+                        itemStyle: { color: '#34d399', borderWidth: 2, borderColor: '#fff' },
+                        areaStyle: { 
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(52, 211, 153, 0.4)' },
+                                { offset: 1, color: 'rgba(52, 211, 153, 0.05)' }
+                            ])
+                        }
+                    }
+                ]
             });
 
             // 品牌分布饼图
-            var brandsToShow = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
-            var brandPieData = [];
+            const brandsToShow = brandFilter === 'all'
+                ? ['美的', '小天鹅', 'COLMO', '东芝']
+                : [brandFilter];
+            const brandPieData = [];
             var brandColors = {'美的': '#3b82f6', '小天鹅': '#06b6d4', 'COLMO': '#8b5cf6', '东芝': '#f472b6'};
             brandsToShow.forEach(function(b) {
-                var val = (summary.brand_customer_cross[b] && summary.brand_customer_cross[b][typeFilter]) || 0;
-                if (typeFilter !== 'all') {
-                    val = summary.brand_customer_cross[b] ? Object.values(summary.brand_customer_cross[b]).reduce(function(a, v){return a+v;}, 0) : 0;
-                }
-                if (val > 0) {
-                    brandPieData.push({name: b, value: val, itemStyle: {color: brandColors[b]}});
+                if (summary.brand_distribution[b]) {
+                    brandPieData.push({name: b, value: summary.brand_distribution[b], itemStyle: {color: brandColors[b]}});
                 }
             });
             brandChart.setOption({
                 tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
                 legend: { bottom: '5%', textStyle: { color: '#94a3b8' } },
                 series: [{
-                    type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
                     label: { show: true, formatter: '{b}\n{d}%', color: '#fff', fontSize: 12 },
                     labelLine: { show: true, lineStyle: { color: '#94a3b8' } },
                     data: brandPieData
@@ -810,19 +1318,20 @@
             });
             
             // 客资类型饼图
-            var typePieData = Object.entries(summary.customer_type_distribution).map(function(entry) {
-                var name = entry[0], value = entry[1];
-                var c = name.includes('卡片') ? '#10b981' : name.includes('家享') ? '#f59e0b' : name.includes('智投') ? '#8b5cf6' : '#64748b';
-                return {name: name, value: value, itemStyle: {color: c}};
-            });
             customerTypeChart.setOption({
                 tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
                 legend: { bottom: '5%', textStyle: { color: '#94a3b8' } },
                 series: [{
-                    type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
                     label: { show: true, formatter: '{b}\n{d}%', color: '#fff', fontSize: 12 },
                     labelLine: { show: true, lineStyle: { color: '#94a3b8' } },
-                    data: typePieData
+                    data: Object.entries(summary.customer_type_distribution).map(function(entry) {
+                        var name = entry[0], value = entry[1];
+                        var c = name.includes('卡片') ? '#10b981' : name.includes('家享') ? '#f59e0b' : name.includes('智投') ? '#8b5cf6' : '#64748b';
+                        return {name: name, value: value, itemStyle: {color: c}};
+                    })
                 }]
             });
             
@@ -833,27 +1342,24 @@
             heatmapBrands.forEach(function(brand, i) {
                 types.forEach(function(type, j) {
                     var val = (summary.brand_customer_cross[brand] && summary.brand_customer_cross[brand][type]) || 0;
-                    // 品类筛选时：淡化非选中行
-                    if (typeFilter !== 'all' && type !== typeFilter) val = 0;
                     heatmapData.push([i, j, val]);
                 });
             });
+            
             var maxVal = Math.max.apply(null, heatmapData.map(function(d) { return d[2]; }));
             if (maxVal === 0) maxVal = 1;
-            var showTypes = typeFilter === 'all' ? types : [typeFilter];
-            var showTypesIdx = typeFilter === 'all' ? [0,1,2,3] : [types.indexOf(typeFilter)];
             heatmapChart.setOption({
                 tooltip: { position: 'top' },
                 grid: { height: '70%', top: '10%' },
                 xAxis: { type: 'category', data: heatmapBrands, splitArea: { show: true }, axisLabel: { color: '#94a3b8' } },
-                yAxis: { type: 'category', data: showTypes, splitArea: { show: true }, axisLabel: { color: '#94a3b8' } },
+                yAxis: { type: 'category', data: types, splitArea: { show: true }, axisLabel: { color: '#94a3b8' } },
                 visualMap: { min: 0, max: maxVal, calculable: true, orient: 'horizontal', left: 'center', bottom: '-5%',
                     inRange: { color: ['#1e293b', '#3b82f6', '#f59e0b'] }, textStyle: { color: '#94a3b8' }, itemWidth: 15, itemHeight: 100 },
                 series: [{ name: '客资量', type: 'heatmap', data: heatmapData, label: { show: true, color: '#fff' },
                     emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0, 0, 0, 0.5)' } } }]
             });
             
-            // 客服处理量TOP10
+            // 客服处理量TOP10（已包含CC+钉钉）
             var visitorData = Object.entries(summary.visitor_stats).sort(function(a,b){return b[1]-a[1]}).slice(0, 10);
             visitorChart.setOption({
                 tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -867,42 +1373,294 @@
                     itemStyle: { borderRadius: [0, 8, 8, 0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#34d399'},{offset:1,color:'#10b981'}]) } 
                 }]
             });
+
+            // ===== 图表6: CC vs 钉钉双渠道对比 =====
+            channelChart.setOption({
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                legend: { data: ['CC', '钉钉'], top: 5, textStyle: { color: '#94a3b8' } },
+                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                xAxis: { type: 'category', data: ['总电话量', '清洗量', '有效量'], axisLabel: { color: '#94a3b8' } },
+                yAxis: { type: 'value', axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
+                series: [
+                    {
+                        name: 'CC', type: 'bar', barWidth: '30%',
+                        data: [summary.total_calls_cc, summary.clean_count_cc, summary.valid_count_cc],
+                        itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#818cf8'}, {offset: 1, color: '#4f46e5'}]), borderRadius: [4,4,0,0] },
+                        label: { show: true, position: 'top', color: '#c7d2fe', fontSize: 12 }
+                    },
+                    {
+                        name: '钉钉', type: 'bar', barWidth: '30%',
+                        data: [summary.total_calls_dd, summary.clean_count_dd, summary.valid_count_dd],
+                        itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#fbbf24'}, {offset: 1, color: '#f59e0b'}]), borderRadius: [4,4,0,0] },
+                        label: { show: true, position: 'top', color: '#fde68a', fontSize: 12 }
+                    }
+                ]
+            });
+
+            // ===== 图表7: 外呼状态漏斗 =====
+            var funnelData = Object.entries(summary.call_status).map(function(item) { return {name: item[0], value: item[1]}; });
+            funnelData.sort(function(a,b){ return b.value - a.value; });
+            var funnelColors = ['#818cf8', '#a78bfa', '#c084fc', '#e879f9', '#f472b6'];
+            funnelChart.setOption({
+                tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                series: [{
+                    type: 'funnel', left: '10%', top: 20, bottom: 20, width: '80%',
+                    min: 0, max: funnelData.length > 0 ? funnelData[0].value : 100,
+                    minSize: '20%', maxSize: '100%',
+                    sort: 'descending', gap: 4,
+                    label: { show: true, position: 'inside', color: '#fff', fontSize: 13 },
+                    itemStyle: { borderColor: 'rgba(0,0,0,0.1)', borderWidth: 1 },
+                    data: funnelData.map(function(d, i) {
+                        return { name: d.name, value: d.value, itemStyle: { color: funnelColors[i % funnelColors.length] } };
+                    })
+                }]
+            });
+
+            // ===== 图表8: 品牌清洗量趋势 =====
+            var brandNames = ['美的', '小天鹅', 'COLMO', '东芝'];
+            var brandTrendColors = [['#818cf8','#4f46e5'], ['#34d399','#10b981'], ['#fbbf24','#f59e0b'], ['#f472b6','#ec4899']];
+            var brandTrendSeries = brandNames.map(function(brand, idx) {
+                var cleanData = summary.daily_data.map(function(day) {
+                    var crossCC = (day['品牌客资交叉_CC'] || {})[brand] || {};
+                    var crossDD = (day['品牌客资交叉_钉钉'] || {})[brand] || {};
+                    var total = Object.values(crossCC).reduce(function(a,b){return a+b;},0) + Object.values(crossDD).reduce(function(a,b){return a+b;},0);
+                    return total;
+                });
+                return {
+                    name: brand, type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
+                    lineStyle: { width: 2.5, color: brandTrendColors[idx][0] },
+                    itemStyle: { color: brandTrendColors[idx][0] },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {offset: 0, color: brandTrendColors[idx][0] + '40'},
+                            {offset: 1, color: brandTrendColors[idx][1] + '05'}
+                        ])
+                    },
+                    data: cleanData
+                };
+            });
+            brandTrendChart.setOption({
+                tooltip: { trigger: 'axis' },
+                legend: { data: brandNames, top: 5, textStyle: { color: '#94a3b8' } },
+                grid: { left: '3%', right: '4%', bottom: '3%', top: 40, containLabel: true },
+                xAxis: { type: 'category', data: summary.daily_data.map(function(d){return d['日期'].substring(5);}), axisLabel: { color: '#94a3b8', rotate: 30 } },
+                yAxis: { type: 'value', name: '清洗量', axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
+                series: brandTrendSeries
+            });
+
+            // ===== 图表9: 客服客资类型堆叠柱状图 =====
+            var visitorNames = Object.keys(summary.visitor_type_detail);
+            visitorNames.sort(function(a,b){ return (summary.visitor_calls[b]||0) - (summary.visitor_calls[a]||0); });
+            var typeNames = ['客服卡片', '家享联盟', '其他'];
+            var stackColors = ['#818cf8', '#34d399', '#fbbf24', '#f472b6'];
+            var stackSeries = typeNames.map(function(t, idx) {
+                return {
+                    name: t, type: 'bar', stack: 'total', barWidth: '40%',
+                    data: visitorNames.map(function(v) { return (summary.visitor_type_detail[v] || {})[t] || 0; }),
+                    itemStyle: { color: stackColors[idx], borderRadius: idx === typeNames.length - 1 ? [4,4,0,0] : [0,0,0,0] },
+                    emphasis: { focus: 'series' }
+                };
+            });
+            visitorTypeChart.setOption({
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                legend: { data: typeNames, top: 5, textStyle: { color: '#94a3b8' } },
+                grid: { left: '3%', right: '4%', bottom: '3%', top: 40, containLabel: true },
+                xAxis: { type: 'category', data: visitorNames, axisLabel: { color: '#94a3b8' } },
+                yAxis: { type: 'value', axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
+                series: stackSeries
+            });
+
+            // ===== 图表11: 清洗量/有效量双轴趋势 =====
+            dualAxisChart.setOption({
+                tooltip: { trigger: 'axis',
+                    formatter: function(params) {
+                        var s = params[0].axisValue + '<br/>';
+                        params.forEach(function(p) {
+                            if (p.seriesName === '有效率') s += p.marker + ' ' + p.seriesName + ': ' + p.value + '%<br/>';
+                            else s += p.marker + ' ' + p.seriesName + ': ' + p.value + '<br/>';
+                        });
+                        return s;
+                    }
+                },
+                legend: { data: ['清洗量', '有效量', '有效率'], top: 5, textStyle: { color: '#94a3b8' } },
+                grid: { left: '3%', right: '4%', bottom: '3%', top: 40, containLabel: true },
+                xAxis: { type: 'category', data: summary.daily_data.map(function(d){return d['日期'].substring(5);}), axisLabel: { color: '#94a3b8', rotate: 30 } },
+                yAxis: [
+                    { type: 'value', name: '数量', axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } } },
+                    { type: 'value', name: '有效率', axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { show: false } }
+                ],
+                series: [
+                    {
+                        name: '清洗量', type: 'bar', barWidth: '25%',
+                        data: summary.daily_data.map(function(d){return d['清洗量'];}),
+                        itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#818cf8'}, {offset: 1, color: '#4f46e5'}]), borderRadius: [4,4,0,0] }
+                    },
+                    {
+                        name: '有效量', type: 'bar', barWidth: '25%',
+                        data: summary.daily_data.map(function(d){return d['有效量'];}),
+                        itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#34d399'}, {offset: 1, color: '#10b981'}]), borderRadius: [4,4,0,0] }
+                    },
+                    {
+                        name: '有效率', type: 'line', yAxisIndex: 1, smooth: true,
+                        data: summary.daily_data.map(function(d){return d['有效率'];}),
+                        lineStyle: { color: '#fbbf24', width: 2.5 },
+                        itemStyle: { color: '#fbbf24' }, symbol: 'circle', symbolSize: 6
+                    }
+                ]
+            });
         }
 
-        function updateBrandDetail(summary, brandFilter, typeFilter) {
+        function updateBrandDetail(summary, brandFilter) {
             var brands = brandFilter === 'all' ? ['美的', '小天鹅', 'COLMO', '东芝'] : [brandFilter];
             var colors = {'美的': '#3b82f6', '小天鹅': '#06b6d4', 'COLMO': '#8b5cf6', '东芝': '#f472b6'};
-            
-            var html = '';
-            brands.forEach(function(brand) {
-                var data = summary.brand_customer_cross[brand] || {};
-                if (typeFilter === 'all') {
-                    var total = Object.values(data).reduce(function(a, b){return a+b}, 0);
-                    html +=
-                        '<div class="brand-card">' +
-                            '<h4 style="color:' + colors[brand] + '">' + brand + '</h4>' +
-                            '<div class="brand-stats">' +
-                                '<div class="brand-stat-item"><span class="brand-stat-label">总计</span><span class="brand-stat-value">' + total.toLocaleString() + '</span></div>' +
-                                '<div class="brand-stat-item"><span class="brand-stat-label">客服卡片</span><span class="brand-stat-value">' + ((data['客服卡片']||0)).toLocaleString() + '</span></div>' +
-                                '<div class="brand-stat-item"><span class="brand-stat-label">家享联盟</span><span class="brand-stat-value">' + ((data['家享联盟']||0)).toLocaleString() + '</span></div>' +
-                                '<div class="brand-stat-item"><span class="brand-stat-label">其他</span><span class="brand-stat-value">' + ((data['其他']||0)).toLocaleString() + '</span></div>' +
-                            '</div>' +
-                        '</div>';
-                } else {
-                    var val = data[typeFilter] || 0;
-                    html +=
-                        '<div class="brand-card">' +
-                            '<h4 style="color:' + colors[brand] + '">' + brand + ' <span style="font-size:12px;color:#94a3b8;">(' + typeFilter + ')</span></h4>' +
-                            '<div class="brand-stats">' +
-                                '<div class="brand-stat-item"><span class="brand-stat-label">' + typeFilter + '</span><span class="brand-stat-value" style="font-size:20px;color:#a78bfa;">' + val.toLocaleString() + '</span></div>' +
-                            '</div>' +
-                        '</div>';
-                }
+            var bgGrads = {
+                '美的': 'linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.02) 100%)',
+                '小天鹅': 'linear-gradient(135deg, rgba(6,182,212,0.08) 0%, rgba(6,182,212,0.02) 100%)',
+                'COLMO': 'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(139,92,246,0.02) 100%)',
+                '东芝': 'linear-gradient(135deg, rgba(244,114,182,0.08) 0%, rgba(244,114,182,0.02) 100%)'
+            };
+            var typeColors = {'客服卡片': '#60a5fa', '家享联盟': '#34d399', '其他': '#94a3b8'};
+
+            // === 计算所有品牌的汇总数据（客资量）===
+            var totalCardCalls = 0, totalCardClean = 0, totalCardValid = 0;
+            var totalJxCalls = 0, totalJxClean = 0, totalJxValid = 0;
+            var totalOthCalls = 0, totalOthClean = 0, totalOthValid = 0;
+            var totalKezi = 0;
+
+            ['美的', '小天鹅', 'COLMO', '东芝'].forEach(function(brand) {
+                var keziType = summary.brand_type_kezi[brand] || {};
+                var cleanData = summary.brand_type_clean[brand] || {};
+                var validData = summary.brand_type_valid[brand] || {};
+                totalCardCalls += keziType['客服卡片'] || 0;
+                totalCardClean += cleanData['客服卡片'] || 0;
+                totalCardValid += validData['客服卡片'] || 0;
+                totalJxCalls += keziType['家享联盟'] || 0;
+                totalJxClean += cleanData['家享联盟'] || 0;
+                totalJxValid += validData['家享联盟'] || 0;
+                totalOthCalls += keziType['其他'] || 0;
+                totalOthClean += cleanData['其他'] || 0;
+                totalOthValid += validData['其他'] || 0;
+                totalKezi += summary.brand_kezi[brand] || 0;
             });
+
+            var totalCalls = totalKezi;
+            var totalClean = totalCardClean + totalJxClean + totalOthClean;
+            var totalValid = totalCardValid + totalJxValid + totalOthValid;
+            var totalRate = totalClean > 0 ? (totalValid / totalClean * 100).toFixed(1) : '0.0';
+            var totalRateColor = parseFloat(totalRate) >= 50 ? '#34d399' : (parseFloat(totalRate) >= 30 ? '#fbbf24' : '#f87171');
+
+            var html = '';
+
+            // === 汇总卡片（独占一行）===
+            if (brandFilter === 'all') {
+                html += '<div class="brand-grid has-summary" style="margin-bottom:18px">';
+                html += '<div class="brand-card summary-card">';
+
+                // 头部
+                html += '<div class="brand-card-header">';
+                html += '<h4 style="color:#a78bfa"><span style="background:#a78bfa;width:4px;height:18px;border-radius:2px;display:inline-block"></span>📊 全部汇总</h4>';
+                html += '<div class="brand-summary-row">';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#93c5fd">' + totalCalls.toLocaleString() + '</span><span class="label">客资</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#f9a8d4">' + totalClean.toLocaleString() + '</span><span class="label">清洗</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#86efac">' + totalValid.toLocaleString() + '</span><span class="label">有效</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:' + totalRateColor + '">' + totalRate + '%</span><span class="label">有效率</span></div>';
+                html += '</div></div>';
+
+                // 类型拆分行
+                html += '<div class="brand-type-section">';
+                var summaryTypes = [
+                    {name: '客服卡片', calls: totalCardCalls, clean: totalCardClean, valid: totalCardValid},
+                    {name: '家享联盟', calls: totalJxCalls, clean: totalJxClean, valid: totalJxValid},
+                    {name: '其他', calls: totalOthCalls, clean: totalOthClean, valid: totalOthValid}
+                ];
+                summaryTypes.forEach(function(t) {
+                    var tRate = t.clean > 0 ? (t.valid / t.clean * 100).toFixed(1) : '0.0';
+                    var tRateColor = parseFloat(tRate) >= 50 ? '#34d399' : (parseFloat(tRate) >= 30 ? '#fbbf24' : '#f87171');
+                    var barWidth = Math.min(parseFloat(tRate), 100);
+
+                    html += '<div class="brand-type-row">';
+                    html += '<span class="brand-type-dot" style="background:' + typeColors[t.name] + '"></span>';
+                    html += '<span class="brand-type-name" style="color:' + typeColors[t.name] + '">' + t.name + '</span>';
+                    html += '<span class="brand-type-data">';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.calls.toLocaleString() + '</span><span class="unit">客资</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.clean.toLocaleString() + '</span><span class="unit">清洗</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + t.valid.toLocaleString() + '</span><span class="unit">有效</span></span>';
+                    html += '</span>';
+                    html += '<span class="brand-type-rate-wrap">';
+                    html += '<span class="brand-type-rate" style="color:' + tRateColor + '">' + tRate + '%</span>';
+                    html += '<div class="brand-type-bar"><div class="brand-type-bar-inner" style="width:' + barWidth + '%;background:' + tRateColor + '"></div></div>';
+                    html += '</span>';
+                    html += '</div>';
+                });
+                html += '</div></div></div>';
+            }
+
+            // === 品牌卡片（每行两个）===
+            html += '<div class="brand-grid">';
+            brands.forEach(function(brand) {
+                var data = summary.brand_type_kezi[brand] || {};
+                var btc = summary.brand_type_clean[brand] || {};
+                var btv = summary.brand_type_valid[brand] || {};
+
+                var calls, clean, valid;
+                if (brandFilter === 'all') {
+                    calls = summary.brand_kezi[brand] || 0;
+                    clean = summary.brand_clean[brand] || 0;
+                    valid = summary.brand_valid[brand] || 0;
+                } else {
+                    calls = summary.kezi_count || 0;
+                    clean = summary.clean_count || 0;
+                    valid = summary.valid_count || 0;
+                }
+                var rate = clean > 0 ? (valid / clean * 100).toFixed(1) : '0.0';
+                var rateColor = parseFloat(rate) >= 50 ? '#34d399' : (parseFloat(rate) >= 30 ? '#fbbf24' : '#f87171');
+
+                // 卡片
+                html += '<div class="brand-card" style="background:' + bgGrads[brand] + '">';
+
+                // 头部
+                html += '<div class="brand-card-header">';
+                html += '<h4 style="color:' + colors[brand] + '"><span style="background:' + colors[brand] + ';width:4px;height:18px;border-radius:2px;display:inline-block"></span>' + brand + '</h4>';
+                html += '<div class="brand-summary-row">';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#93c5fd">' + calls.toLocaleString() + '</span><span class="label">客资</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#f9a8d4">' + clean.toLocaleString() + '</span><span class="label">清洗</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:#86efac">' + valid.toLocaleString() + '</span><span class="label">有效</span></div>';
+                html += '<div class="brand-summary-item"><span class="value" style="color:' + rateColor + '">' + rate + '%</span><span class="label">有效率</span></div>';
+                html += '</div></div>';
+
+                // 类型拆分行
+                html += '<div class="brand-type-section">';
+                ['客服卡片', '家享联盟', '其他'].forEach(function(t) {
+                    var tCalls = data[t] || 0;
+                    var tClean = btc[t] || 0;
+                    var tValid = btv[t] || 0;
+                    var tRate = tClean > 0 ? (tValid / tClean * 100).toFixed(1) : '0.0';
+                    var tRateColor = parseFloat(tRate) >= 50 ? '#34d399' : (parseFloat(tRate) >= 30 ? '#fbbf24' : '#f87171');
+                    var barWidth = Math.min(parseFloat(tRate), 100);
+
+                    html += '<div class="brand-type-row">';
+                    html += '<span class="brand-type-dot" style="background:' + typeColors[t] + '"></span>';
+                    html += '<span class="brand-type-name" style="color:' + typeColors[t] + '">' + t + '</span>';
+                    html += '<span class="brand-type-data">';
+                    html += '<span class="brand-type-cell"><span class="num">' + tCalls.toLocaleString() + '</span><span class="unit">客资</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + tClean.toLocaleString() + '</span><span class="unit">清洗</span></span>';
+                    html += '<span class="brand-type-cell"><span class="num">' + tValid.toLocaleString() + '</span><span class="unit">有效</span></span>';
+                    html += '</span>';
+                    html += '<span class="brand-type-rate-wrap">';
+                    html += '<span class="brand-type-rate" style="color:' + tRateColor + '">' + tRate + '%</span>';
+                    html += '<div class="brand-type-bar"><div class="brand-type-bar-inner" style="width:' + barWidth + '%;background:' + tRateColor + '"></div></div>';
+                    html += '</span>';
+                    html += '</div>';
+                });
+                html += '</div></div>';
+            });
+            html += '</div>';
+
             document.getElementById('brandDetailGrid').innerHTML = html;
         }
 
-        function updateVisitorTable(summary, typeFilter) {
+
+        function updateVisitorTable(summary) {
             // === 计算汇总数据 ===
             var totalCalls = 0, totalClean = 0, totalValid = 0;
             Object.values(summary.visitor_calls || {}).forEach(function(v){totalCalls += v;});
@@ -917,17 +1675,17 @@
             Object.values(summary.visitor_type_detail || {}).forEach(function(v){
                 sumCardC += (v['客服卡片']||0);
                 sumJxC   += (v['家享联盟']||0);
-                sumOthC += (v['其他']||0);
+                sumOthC += v['其他']||0;
             });
             Object.values(summary.visitor_type_clean || {}).forEach(function(v){
                 sumCardCl += (v['客服卡片']||0);
                 sumJxCl  += (v['家享联盟']||0);
-                sumOthCl += (v['其他']||0);
+                sumOthCl += v['其他']||0;
             });
             Object.values(summary.visitor_type_valid || {}).forEach(function(v){
                 sumCardV += (v['客服卡片']||0);
                 sumJxV  += (v['家享联盟']||0);
-                sumOthV += (v['其他']||0);
+                sumOthV += v['其他']||0;
             });
 
             // 按电话量降序排列
@@ -972,25 +1730,30 @@
                 var valid = (summary.visitor_valid && summary.visitor_valid[name]) || 0;
                 var totalRate = clean > 0 ? (valid / clean * 100).toFixed(1) : '0.0';
                 
+                // 按客资类型拆分
                 var td = (summary.visitor_type_detail && summary.visitor_type_detail[name]) || {};
                 var tcl = (summary.visitor_type_clean && summary.visitor_type_clean[name]) || {};
                 var tvl = (summary.visitor_type_valid && summary.visitor_type_valid[name]) || {};
                 
+                // 客服卡片数据
                 var cardC = td['客服卡片'] || 0;
                 var cardCl = tcl['客服卡片'] || 0;
                 var cardV = tvl['客服卡片'] || 0;
                 var cardR = cardCl > 0 ? (cardV / cardCl * 100).toFixed(1) : '0.0';
                 
+                // 家享联盟数据
                 var jxC = td['家享联盟'] || 0;
                 var jxCl = tcl['家享联盟'] || 0;
                 var jxV = tvl['家享联盟'] || 0;
                 var jxR = jxCl > 0 ? (jxV / jxCl * 100).toFixed(1) : '0.0';
                 
+                // 其他数据
                 var otherC = td['其他'] || 0;
                 var otherCl = tcl['其他'] || 0;
                 var otherV = tvl['其他'] || 0;
                 var otherR = otherCl > 0 ? (otherV / otherCl * 100).toFixed(1) : '0.0';
                 
+                // 排名颜色
                 var rankColor = idx < 3 ? ['#fbbf24', '#94a3b8', '#b45309'][idx] : '#64748b';
                 var rankClass = idx < 3 ? ' rank-' + (idx + 1) : '';
                 
@@ -1004,10 +1767,9 @@
                         '<span class="sum-item">清洗: <b>' + clean.toLocaleString() + '</b></span>' +
                         '<span class="sum-item">有效: <b>' + valid.toLocaleString() + '</b></span>' +
                         '<span class="sum-rate">' + totalRate + '%</span>' +
-                    '</div>';
-                
-                if (typeFilter === 'all') {
-                    html += '<div class="visitor-types">' +
+                    '</div>' +
+                    '<div class="visitor-types">' +
+                        // 客服卡片
                         '<div class="type-row card">' +
                             '<span class="type-label">📋 客服卡片</span>' +
                             '<span class="type-stats">' +
@@ -1015,6 +1777,7 @@
                                 '<span class="type-rate" style="color:' + (cardR >= 50 ? '#34d399' : '#fbbf24') + '">' + cardR + '%</span>' +
                             '</span>' +
                         '</div>' +
+                        // 家享联盟
                         '<div class="type-row jx">' +
                             '<span class="type-label">🤝 家享联盟</span>' +
                             '<span class="type-stats">' +
@@ -1022,6 +1785,7 @@
                                 '<span class="type-rate" style="color:' + (jxR >= 20 ? '#34d399' : '#fbbf24') + '">' + jxR + '%</span>' +
                             '</span>' +
                         '</div>' +
+                        // 其他
                         '<div class="type-row other">' +
                             '<span class="type-label">📦 其他</span>' +
                             '<span class="type-stats">' +
@@ -1029,26 +1793,8 @@
                                 '<span class="type-rate" style="color:' + (otherR >= 40 ? '#34d399' : '#fbbf24') + '">' + otherR + '%</span>' +
                             '</span>' +
                         '</div>' +
-                    '</div>';
-                } else {
-                    // 只显示选中的品类
-                    var tc = (td[typeFilter] || 0);
-                    var tcl_v = (tcl[typeFilter] || 0);
-                    var tvl_v = (tvl[typeFilter] || 0);
-                    var tr = tcl_v > 0 ? (tvl_v / tcl_v * 100).toFixed(1) : '0.0';
-                    var trowClass = typeFilter === '客服卡片' ? 'card' : typeFilter === '家享联盟' ? 'jx' : 'other';
-                    var tlabel = typeFilter === '客服卡片' ? '📋 ' + typeFilter : typeFilter === '家享联盟' ? '🤝 ' + typeFilter : '📦 ' + typeFilter;
-                    html += '<div class="visitor-types">' +
-                        '<div class="type-row ' + trowClass + '">' +
-                            '<span class="type-label">' + tlabel + '</span>' +
-                            '<span class="type-stats">' +
-                                '<b>' + tc + '</b> / <b>' + tcl_v + '</b> / <b>' + tvl_v + '</b>' +
-                                '<span class="type-rate" style="color:' + (tr >= 50 ? '#34d399' : '#fbbf24') + '">' + tr + '%</span>' +
-                            '</span>' +
-                        '</div>' +
-                    '</div>';
-                }
-                html += '</div>';
+                    '</div>' +
+                '</div>';
             });
             html += '</div>';
             document.getElementById('visitorTable').innerHTML = html;
@@ -1060,141 +1806,95 @@
             customerTypeChart && customerTypeChart.resize();
             heatmapChart && heatmapChart.resize();
             visitorChart && visitorChart.resize();
+            channelChart && channelChart.resize();
+            funnelChart && funnelChart.resize();
+            brandTrendChart && brandTrendChart.resize();
+            visitorTypeChart && visitorTypeChart.resize();
+            dualAxisChart && dualAxisChart.resize();
         });
+</script>
+</div>
 
-        // init() 由登录成功后的 decryptAndLoad 调用，不在此处执行
-    </script>
-    </div><!-- #app -->
+<script>
+// ===== 登录验证 =====
+(function() {
+  var KEY = 'cc_kefu_auth_ok';
 
-    <!-- 登录覆盖层 -->
-    <div id="login-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#050a18 0%,#0a1128 50%,#1a1a2e 100%);display:flex;align-items:center;justify-content:center;z-index:9999;">
-        <div style="text-align:center;padding:40px 50px;background:rgba(15,23,42,0.85);border-radius:18px;border:1px solid rgba(99,102,241,0.25);box-shadow:0 8px 40px rgba(79,70,229,0.2);min-width:340px;">
-            <h2 style="color:#e2e8f0;margin:0 0 8px;font-size:22px;font-weight:600;">🔒 客服清洗数据看板</h2>
-            <p style="color:#94a3b8;margin:0 0 25px;font-size:14px;">请输入访问密码</p>
-            <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
-                <input type="password" id="login-input" placeholder="请输入密码" autofocus style="width:200px;padding:12px 16px;border:1px solid rgba(99,102,241,0.3);border-radius:8px;background:rgba(15,23,42,0.8);color:#e2e8f0;font-size:16px;outline:none;">
-                <button id="login-btn" style="padding:12px 24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:8px;color:#fff;font-size:16px;cursor:pointer;">确认</button>
-            </div>
-            <div id="login-error" style="color:#ef4444;margin-top:15px;font-size:13px;display:none;">密码错误，请重试</div>
-        </div>
-    </div>
+  function checkAuth() {
+    if (localStorage.getItem(KEY)) {
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      decryptAndLoad(localStorage.getItem(KEY));
+    } else {
+      document.getElementById('app').style.display = 'none';
+    }
+  }
 
-    <script>
-    
-    (function() {
-      var KEY = 'cc_auth_ok';
+  function doLogin() {
+    var pwd = document.getElementById('login-input').value;
+    if (!pwd) return;
+    decryptAndLoad(pwd);
+  }
 
-      // 使用 localStorage（持久化），兼容浏览器隐私保护拦截
-      function safeGetStorage(key) {
-        try { return localStorage.getItem(key); } catch(e) { return null; }
-      }
-      function safeSetStorage(key, val) {
-        try { localStorage.setItem(key, val); } catch(e) { /* 静默忽略 */ }
-      }
-      function safeRemoveStorage(key) {
-        try { localStorage.removeItem(key); } catch(e) { /* 静默忽略 */ }
-      }
+  async function decryptAndLoad(pwd) {
+    try {
+      var enc = new TextEncoder();
+      var keyMaterial = await crypto.subtle.importKey(
+        'raw', enc.encode(pwd), {name:'PBKDF2'}, false, ['deriveKey']
+      );
+      var key = await crypto.subtle.deriveKey(
+        { name:'PBKDF2', salt: enc.encode('dashboard'), iterations:10000, hash:'SHA-256' },
+        keyMaterial, { name:'AES-CBC', length:256 }, false, ['decrypt']
+      );
+      // 从外部文件加载加密数据 (防缓存)
+      var resp = await fetch('dashboard_data.enc?t=' + Date.now());
+      if (!resp.ok) throw new Error('无法加载数据文件');
+      var encryptedData = await resp.text();
+      var bin = atob(encryptedData);
+      var bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      var iv = bytes.slice(0, 16);
+      var data = bytes.slice(16);
+      var decrypted = await crypto.subtle.decrypt({name:'AES-CBC', iv:iv}, key, data);
+      var jsonStr = new TextDecoder().decode(decrypted);
+      DATA = JSON.parse(jsonStr);
+      localStorage.setItem(KEY, pwd);
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      init();
+    } catch(e) {
+      localStorage.removeItem(KEY);
+      document.getElementById('login-overlay').style.display = '';
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('login-input').value = '';
+      document.getElementById('login-input').focus();
+    }
+  }
 
-      function checkAuth() {
-        var cached = safeGetStorage(KEY);
-        if (cached) {
-          document.getElementById('login-overlay').style.display = 'none';
-          decryptAndLoad(cached);
-        } else {
-          // app 初始隐藏，login-overlay 显示
-          var appEl = document.getElementById('app');
-          if (appEl) appEl.style.display = 'none';
-        }
-      }
+  document.getElementById('login-btn').addEventListener('click', doLogin);
+  document.getElementById('login-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+  checkAuth();
+})();
 
-      function doLogin() {
-        var pwd = document.getElementById('login-input').value;
-        if (!pwd) return;
-        document.getElementById('login-error').style.display = 'none';
-        decryptAndLoad(pwd);
-      }
+// ===== 禁止爬虫/F12/右键 =====
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))) {
+      e.preventDefault(); return false;
+    }
+  });
+  var _open = false;
+  setInterval(function() {
+    if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
+      if (!_open) { _open = true; document.body.innerHTML = '<div style="color:#ef4444;text-align:center;padding:50px;font-size:24px;">&#x26A0;&#xFE0F; 不允许的操作</div>'; }
+    }
+  }, 1000);
+})();
+</script>
 
-      async function decryptAndLoad(pwd) {
-        try {
-          // 从外部文件加载加密数据
-          const encRes = await fetch('dashboard_data.enc?t=' + Date.now());
-          if (!encRes.ok) {
-            console.error('Failed to load encrypted data');
-            showLoginError();
-            return;
-          }
-          const enc_data64 = await encRes.text();
-          if (!enc_data64 || enc_data64.trim() === '') {
-            console.error('Empty encrypted data');
-            showLoginError();
-            return;
-          }
-
-          var enc = new TextEncoder();
-          var keyMaterial = await crypto.subtle.importKey(
-            'raw', enc.encode(pwd), {name:'PBKDF2'}, false, ['deriveKey']
-          );
-          var key = await crypto.subtle.deriveKey(
-            { name:'PBKDF2', salt: enc.encode('dashboard'), iterations:10000, hash:'SHA-256' },
-            keyMaterial,
-            { name:'AES-CBC', length:256 },
-            false,
-            ['decrypt']
-          );
-          var bin = atob(enc_data64.trim());
-          var bytes = new Uint8Array(bin.length);
-          for (var i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
-          var iv = bytes.slice(0,16);
-          var data = bytes.slice(16);
-          var decrypted = await crypto.subtle.decrypt({name:'AES-CBC', iv:iv}, key, data);
-          dashboardData = JSON.parse(new TextDecoder().decode(decrypted));
-          safeSetStorage(KEY, pwd);
-          document.getElementById('login-overlay').style.display = 'none';
-          document.getElementById('app').style.display = 'block';
-          initDatePicker();
-          initCharts();
-          applyFilter();
-        } catch(e) {
-          safeRemoveStorage(KEY);
-          showLoginError();
-          console.error('Decrypt failed:', e);
-        }
-      }
-
-      function showLoginError() {
-        var overlay = document.getElementById('login-overlay');
-        var appEl = document.getElementById('app');
-        if (overlay) overlay.style.display = '';
-        if (appEl) appEl.style.display = 'none';
-        var errEl = document.getElementById('login-error');
-        if (errEl) errEl.style.display = 'block';
-        var inputEl = document.getElementById('login-input');
-        if (inputEl) { inputEl.value = ''; inputEl.focus(); }
-      }
-
-      document.getElementById('login-btn').addEventListener('click', doLogin);
-      document.getElementById('login-input').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') doLogin();
-      });
-
-      checkAuth();
-    })();
-
-    // ===== 禁止爬虫/F12/右键 =====
-    (function() {
-      document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))) {
-          e.preventDefault(); return false;
-        }
-      });
-      var _open = false;
-      setInterval(function() {
-        if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
-          if (!_open) { _open = true; document.body.innerHTML = ''; }
-        }
-      }, 1000);
-    })();
-    </script>
 </body>
 </html>
