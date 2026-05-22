@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试 - 客服清洗数据看板</title>
+</head>
+<body>
+<h2>调试信息控制台（F12）</h2>
+<pre id="output" style="background:#1e1e1e;color:#0f0;padding:20px;font-size:12px;overflow:auto;max-height:80vh;"></pre>
+<script>
+function log(msg) {
+    document.getElementById('output').textContent += msg + '\n';
+    console.log(msg);
+}
+(function() {
+    log('=== 开始调试 ===');
+    log('UserAgent: ' + navigator.userAgent);
+    log('Secure: ' + location.protocol);
+    try {
+        log('crypto.subtle: ' + (typeof crypto !== 'undefined' && typeof crypto.subtle !== 'undefined' ? 'OK' : 'MISSING'));
+    } catch(e) {
+        log('crypto.subtle check FAILED: ' + e);
+    }
+    // 读取 encryptedData
+    var encEl = null;
+    try {
+        encEl = document.querySelector('script:not([src])');
+        log('encryptedData from page: ' + document.querySelectorAll('script:not([src])').length + ' inline scripts');
+    } catch(e) {
+        log('Error reading scripts: ' + e);
+    }
+    // 测试 PBKDF2
+    var testPwd = 'Dg@2026kefu#kanban';
+    var testSalt = 'dashboard';
+    log('Testing PBKDF2...');
+    crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(testPwd),
+        'PBKDF2',
+        false,
+        ['deriveKey']
+    ).then(function(key) {
+        log('importKey OK');
+        return crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: new TextEncoder().encode(testSalt), iterations: 10000, hash: 'SHA-256' },
+            key,
+            { name: 'AES-CBC', length: 256 },
+            false,
+            ['decrypt']
+        );
+    }).then(function(aesKey) {
+        log('deriveKey OK');
+        // 找到 encryptedData
+        var scripts = document.querySelectorAll('script:not([src])');
+        var encData = null;
+        for (var i = 0; i < scripts.length; i++) {
+            var m = scripts[i].textContent.match(/var encryptedData = '([^']+)'/);
+            if (m) { encData = m[1]; break; }
+        }
+        if (!encData) { log('encryptedData NOT FOUND in scripts'); return; }
+        log('encryptedData length: ' + encData.length);
+        log('encryptedData first 30: ' + encData.substring(0, 30));
+        var iv = new Uint8Array(16);
+        var encBytes = Uint8Array.from(atob(encData), function(c) { return c.charCodeAt(0); });
+        log('decoded bytes length: ' + encBytes.length);
+        return crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, aesKey, encBytes);
+    }).then(function(decrypted) {
+        var str = new TextDecoder().decode(decrypted);
+        log('DECRYPT SUCCESS! len=' + str.length);
+        log('First 100: ' + str.substring(0, 100));
+    }).catch(function(err) {
+        log('ERROR: ' + err + (err.message ? ' - ' + err.message : ''));
+        if (err.stack) log('Stack: ' + err.stack.split('\n')[0]);
+    });
+})();
+</script>
+</body>
+</html>
